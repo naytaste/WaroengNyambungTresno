@@ -1,99 +1,53 @@
-<!DOCTYPE html>
-<html lang="id">
+<!DOCTYPE html><html lang="id">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Waroeng Nyambung Tresno</title>
+<title>WAROENG NYAMBUNG TRESNO</title>
 <script src="https://cdn.tailwindcss.com"></script>
 </head>
-
-<body class="bg-pink-50 min-h-screen">
-
-<div class="max-w-3xl mx-auto p-6">
-
-<!-- HEADER -->
-<div class="bg-gradient-to-r from-pink-500 to-rose-500 text-white p-6 rounded-3xl shadow-lg mb-8">
+<body class="bg-gray-100"><div class="max-w-2xl mx-auto p-4">
   <h1 class="text-3xl font-bold text-center">WAROENG NYAMBUNG TRESNO</h1>
-  <p class="text-center text-pink-100 mt-2">One Bite, Fall In Tresno</p>
-</div>
-
-<!-- NAMA CUSTOMER -->
-<div class="bg-white p-5 rounded-2xl shadow mb-6">
-  <label class="font-semibold text-pink-700">Nama Pemesan</label>
-  <input id="customerName" type="text"
-    class="w-full border border-pink-200 focus:border-pink-500 focus:ring-2 focus:ring-pink-200 p-3 rounded-xl mt-2 outline-none"
-    placeholder="Masukkan nama...">
-</div>
-
-<!-- MENU -->
-<div id="menuContainer" class="space-y-8"></div>
-
-<!-- KERANJANG -->
-<div class="bg-white p-6 rounded-2xl shadow mt-10">
-  <h2 class="text-xl font-bold text-pink-700 mb-4">Keranjang</h2>
-  <ul id="cartItems" class="space-y-3 text-sm"></ul>
-  <div class="border-t mt-4 pt-4 flex justify-between font-bold text-lg">
-    <span>Total</span>
-    <span>Rp <span id="total">0</span></span>
+  <p class="text-center text-gray-600 mb-6">ONE BITE, FALL IN TRESNO!</p>  <div class="bg-white p-4 rounded-2xl shadow mb-6">
+    <label class="font-semibold">Nama Pemesan</label>
+    <input id="customerName" type="text" class="w-full border p-2 rounded-xl mt-1" placeholder="Masukkan nama...">
+  </div>  <div id="menuContainer" class="space-y-6"></div>  <div class="mt-8 bg-white p-4 rounded-2xl shadow">
+    <h2 class="font-bold text-lg mb-3">Keranjang</h2>
+    <ul id="cartItems" class="text-sm space-y-2"></ul>
+    <p class="font-bold mt-3">Total: Rp <span id="total">0</span></p>
+    <button onclick="checkout()" class="w-full mt-4 bg-green-600 text-white py-3 rounded-2xl text-lg">Bayar Sekarang</button>
   </div>
-  <button onclick="checkout()"
-    class="w-full mt-6 bg-pink-600 hover:bg-pink-700 text-white py-3 rounded-2xl text-lg transition">
-    Bayar Sekarang
-  </button>
-</div>
-
-</div>
-
-<script>
-
+</div><script>
 const menuData = [
-  {
-    category:"Basreng & Kentang",
-    items:[
-      {
-        name:"Basreng Basah",
-        price:5000,
-        options:{
-          type:"multiple",
-          label:"Pilih Bumbu",
-          choices:["Chili Oil","Sapi Panggang","Balado","BBQ","Pedas Tabur","Jagung Manis"]
-        }
-      },
-      { name:"Kentang", price:5000 },
-      { name:"Tahu Kocek", price:5000 }
-    ]
-  },
-  {
-    category:"Ropang Mini",
-    items:[
-      {
-        name:"Ropang Manis Mini",
-        price:2000,
-        options:{
-          type:"single",
-          label:"Pilih Rasa",
-          choices:["Coklat","Keju","Strawberry","Tiramisu"]
-        }
-      },
-      { name:"Ropang Manis Reguler", price:5000 },
-      { name:"Ropang Asin Reguler", price:5000 }
-    ]
-  },
-  {
-    category:"Mie",
-    items:[
-      {
-        name:"Intermie",
-        price:4000,
-        options:{
-          type:"single",
-          label:"Jenis",
-          choices:["Kuah","Goreng","Nyemek"]
-        }
-      },
-      { name:"Indomie / Sedap Series", price:6000 }
-    ]
-  }
+  {category:"Basreng & Kentang", items:[
+    {name:"Basreng Basah", price:5000},
+    {name:"Kentang", price:5000},
+    {name:"Tahu Kocek", price:5000}
+  ]},
+  {category:"Ropang Mini", items:[
+    {name:"Ropang Manis Mini", price:2000},
+    {name:"Ropang Manis Reguler", price:5000},
+    {name:"Ropang Asin Reguler", price:5000}
+  ]},
+  {category:"Mie", items:[
+    {name:"Intermie", price:4000},
+    {name:"Indomie / Sedap Series", price:6000}
+  ]},
+  {category:"Nasi & Ayam Korea", items:[
+    {name:"Nasi Bakar", price:10000},
+    {name:"Ayam Classic Korea", price:12000},
+    {name:"Nasi Ayam Korea", price:15000}
+  ]},
+  {category:"Ice Cream", items:[
+    {name:"Es Krim S", price:3000},
+    {name:"Es Cemil M", price:5000},
+    {name:"Es Cemil L", price:10000}
+  ]},
+  {category:"Minuman", items:[
+    {name:"Teajus", price:2000},
+    {name:"Kopi Keplak", price:3000},
+    {name:"Pop Ice", price:3000},
+    {name:"Milo", price:4000}
+  ]}
 ];
 
 let cart = [];
@@ -101,122 +55,42 @@ let total = 0;
 
 function renderMenu(){
   const container = document.getElementById("menuContainer");
-
-  menuData.forEach(category=>{
+  menuData.forEach(cat => {
     const section = document.createElement("div");
-    section.innerHTML = `<h2 class="text-2xl font-bold text-pink-700 mb-4">${category.category}</h2>`;
+    section.innerHTML = `<h2 class="text-xl font-bold mb-2">${cat.category}</h2>`;
 
-    category.items.forEach(item=>{
-      const card = document.createElement("div");
-      card.className = "bg-white p-5 rounded-2xl shadow mb-4";
-
-      let optionsHTML = "";
-
-      if(item.options){
-        optionsHTML += `<p class="font-semibold mt-3 mb-2 text-sm text-pink-600">${item.options.label}</p>`;
-
-        item.options.choices.forEach(choice=>{
-          if(item.options.type === "single"){
-            optionsHTML += `
-              <label class="flex items-center gap-2 text-sm mb-1">
-                <input type="radio" name="${item.name}" value="${choice}">
-                ${choice}
-              </label>
-            `;
-          }
-
-          if(item.options.type === "multiple"){
-            optionsHTML += `
-              <label class="flex items-center gap-2 text-sm mb-1">
-                <input type="checkbox" name="${item.name}" value="${choice}">
-                ${choice}
-              </label>
-            `;
-          }
-        });
-      }
-
-      card.innerHTML = `
+    cat.items.forEach(item => {
+      const div = document.createElement("div");
+      div.className = "bg-white p-4 rounded-2xl shadow mb-3";
+      div.innerHTML = `
         <div class="flex justify-between items-center">
           <div>
             <h3 class="font-semibold">${item.name}</h3>
-            <p class="text-pink-600 font-bold">Rp ${item.price}</p>
+            <p class="text-sm text-gray-500">Rp ${item.price}</p>
           </div>
-          <button onclick="addToCart('${item.name}', ${item.price})"
-            class="bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-xl transition">
-            Tambah
-          </button>
+          <button onclick="addToCart('${item.name}',${item.price})" class="bg-blue-500 text-white px-4 py-2 rounded-xl">Tambah</button>
         </div>
-        ${optionsHTML}
-      `;
+        <textarea id="note-${item.name}" placeholder="Tambahan / request khusus..." class="w-full border p-2 rounded-xl mt-2 text-sm"></textarea>`;
+  section.appendChild(div);
+});
 
-      section.appendChild(card);
-    });
+container.appendChild(section);
 
-    container.appendChild(section);
-  });
-}
+}); }
 
-function addToCart(name, price){
-  const selectedOptions = [];
+function addToCart(name, price){ const note = document.getElementById(note-${name})?.value || ""; cart.push({name, price, note}); total += price; renderCart(); }
 
-  const inputs = document.querySelectorAll(`input[name="${name}"]:checked`);
-  inputs.forEach(input=>{
-    selectedOptions.push(input.value);
-  });
+function renderCart(){ const cartList = document.getElementById("cartItems"); cartList.innerHTML = ""; cart.forEach(item => { const li = document.createElement("li"); li.innerHTML = <strong>${item.name}</strong> - Rp ${item.price}<br><span class='text-gray-500'>${item.note}</span>; cartList.appendChild(li); }); document.getElementById("total").textContent = total; }
 
-  cart.push({
-    name:name,
-    price:price,
-    options:selectedOptions
-  });
+function checkout(){ const name = document.getElementById("customerName").value; if(!name){ alert("Nama wajib diisi"); return; } if(cart.length === 0){ alert("Keranjang kosong"); return; }
 
-  total += price;
-  renderCart();
-}
+const orderData = { customer:name, items:cart, total:total, time:new Date().toLocaleString() };
 
-function renderCart(){
-  const list = document.getElementById("cartItems");
-  list.innerHTML = "";
+console.log("ORDER MASUK:", orderData); alert("Silakan bayar via QRIS. Setelah transfer, tunjukkan bukti ke kasir.");
 
-  cart.forEach(item=>{
-    const li = document.createElement("li");
-    li.innerHTML = `
-      <div class="bg-pink-50 p-3 rounded-xl">
-        <div class="font-semibold">${item.name}</div>
-        ${item.options.length ? `<div class="text-xs text-gray-600">${item.options.join(", ")}</div>` : ""}
-        <div class="font-bold text-pink-600">Rp ${item.price}</div>
-      </div>
-    `;
-    list.appendChild(li);
-  });
+cart = []; total = 0; renderCart(); }
 
-  document.getElementById("total").innerText = total;
-}
-
-function checkout(){
-  const name = document.getElementById("customerName").value;
-
-  if(!name){
-    alert("Nama wajib diisi");
-    return;
-  }
-
-  if(cart.length === 0){
-    alert("Keranjang kosong");
-    return;
-  }
-
-  alert("Silakan bayar via QRIS dan tunjukkan bukti ke kasir.");
-
-  cart = [];
-  total = 0;
-  renderCart();
-}
-
-renderMenu();
-
-</script>
+renderMenu(); </script>
 
 </body>
 </html>
