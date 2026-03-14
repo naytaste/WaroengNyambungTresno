@@ -41,7 +41,7 @@
     </div>
    </header><!-- Table Number Input -->
    <div class="bg-white border-b border-pink-200 p-3">
-    <div class="max-w-lg mx-auto flex items-center gap-3"><span class="text-pink-600 font-medium text-sm">📍 Nomor Meja:</span> <input type="text" id="table-number" placeholder="Contoh: 5" class="flex-1 px-3 py-2 border-2 border-pink-200 rounded-lg focus:border-pink-500 focus:outline-none text-center font-bold text-lg max-w-[100px]">
+    <div class="max-w-lg mx-auto flex items-center gap-3"><span class="text-pink-600 font-medium text-sm">📌 Nama Pelanggan:</span> <input type="text" id="table-number" placeholder="Contoh: 5" class="flex-1 px-3 py-2 border-2 border-pink-200 rounded-lg focus:border-pink-500 focus:outline-none text-center font-bold text-lg max-w-[100px]">
     </div>
    </div><!-- Category Tabs -->
    <div class="bg-white border-b border-pink-100 sticky top-[88px] z-30">
@@ -107,28 +107,28 @@
   </div>
   <script>
     const defaultConfig = {
-      restaurant_name: '🍽️ Waroeng Nyambung Tresno',
+      restaurant_name: 'WAROENG NYAMBUNG TRESNO',
       welcome_text: 'One Bite, Fall in Tresno! 💛'
     };
 
     // MENU DATA - SESUAI REQUEST 46 ITEM
     const menuItems = [
       // MAKANAN
-      { id: 1, name: 'Basreng Basah', price: 5000, category: 'makanan', emoji: '🌶️', desc: 'Basreng basah krispy', bumbu: ['Chili Oil', 'Sapi Panggang', 'Balado', 'BBQ', 'Pedas Tabur', 'Jagung Manis'] },
-      { id: 2, name: 'Aneka Frozen Food', price: 1000, category: 'makanan', emoji: '❄️', desc: '(Pilih lebih dari 1)', items: ['Sosis', 'Kornet', 'Otak-otak', 'Sukoi', 'Tempura', 'Tofu', 'Nugget', 'Scallop', 'Dimsum', 'Cireng Salju'], bumbu: ['Chili Oil', 'Sapi Panggang', 'Balado', 'BBQ', 'Pedas Tabur', 'Jagung Manis'] },
-      { id: 3, name: 'Kentang', price: 5000, category: 'makanan', emoji: '🍟', desc: 'Kentang goreng potong', bumbu: ['Chili Oil', 'Sapi Panggang', 'Balado', 'BBQ', 'Pedas Tabur', 'Jagung Manis'] },
-      { id: 4, name: 'Tahu Kocek', price: 5000, category: 'makanan', emoji: '🧈', desc: 'Tahu goreng potong sambal' },
+      { id: 1, name: 'Basreng Basah', price: 5000, category: 'makanan', emoji: '🌶️', desc: 'baso ikan yg alergi bodoamat dah', bumbu: ['Chili Oil', 'Daun Jeruk', 'Sapi Panggang', 'Balado', 'BBQ', 'Pedas Tabur', 'Jagung Manis'] },
+      { id: 2, name: 'Aneka Frozen Food', price: 1000, category: 'makanan', emoji: '🍥', desc: 'capek nambahin, beli ajalah rasain sendiri', items: ['Sosis', 'Kornet', 'Otak-otak', 'Sukoi', 'Tempura', 'Tofu', 'Nugget', 'Scallop', 'Siomay', 'Cireng Salju', 'pentol'], bumbu: ['Chili Oil', 'Daun Jeruk', 'Sapi Panggang', 'Balado', 'BBQ', 'Pedas Tabur', 'Jagung Manis'] },
+      { id: 3, name: 'Kentang', price: 5000, category: 'makanan', emoji: '🍟', desc: 'easy peasy', bumbu: ['Chili Oil', 'Daun Jeruk', 'Sapi Panggang', 'Balado', 'BBQ', 'Pedas Tabur', 'Jagung Manis'] },
+      { id: 4, name: 'Tahu Kocek', price: 5000, category: 'makanan', emoji: '🌶️', desc: 'kebetulan asli jember' },
       { id: 17, name: 'Nasi Bakar Tongkol', price: 10000, category: 'makanan', emoji: '🍚', desc: 'Nasi bakar + Tongkol', nasiVarian: ['Daun Jeruk', 'Goreng Garam'] },
       { id: 18, name: 'Nasi Bakar Ayam', price: 10000, category: 'makanan', emoji: '🍚', desc: 'Nasi bakar + Ayam', nasiVarian: ['Daun Jeruk', 'Goreng Garam'] },
       { id: 19, name: 'Nasi Bakar Jamur', price: 10000, category: 'makanan', emoji: '🍚', desc: 'Nasi bakar + Jamur', nasiVarian: ['Daun Jeruk', 'Goreng Garam'] },
       { id: 20, name: 'Nasi Bakar Teri', price: 10000, category: 'makanan', emoji: '🍚', desc: 'Nasi bakar + Teri', nasiVarian: ['Daun Jeruk', 'Goreng Garam'] },
-      { id: 21, name: 'Ayam Classic Korea', price: 18000, category: 'makanan', emoji: '🍗', desc: 'Tanpa Nasi', sauce: ['Blackpepper', 'Spicy', 'Garlic Butter'] },
-      { id: 22, name: 'Nasi Ayam Korea', price: 20000, category: 'makanan', emoji: '🍛', desc: 'Nasi + Ayam Korea', sauce: ['Blackpepper', 'Spicy', 'Garlic Butter'] },
+      { id: 21, name: 'Ayam Classic Korea', price: 18000, category: 'makanan', emoji: '🍗', desc: 'gaada nasinya😑', sauce: ['Blackpepper', 'Spicy', 'Garlic Butter'] },
+      { id: 22, name: 'Nasi Ayam Korea', price: 20000, category: 'makanan', emoji: '🍛', desc: 'ada nasinya🥱', sauce: ['Blackpepper', 'Spicy', 'Garlic Butter'] },
 
       // ROPANG
-      { id: 5, name: 'Ropang Manis Mini', price: 2000, category: 'ropang', emoji: '🥐', desc: 'Roti panggang manis mini (1 rasa + topping)', rasa: ['Coklat', 'Matcha', 'Tiramisu', 'Blueberry', 'Strawberry'], maxRasa: 1, topping: ['Meses', 'Keju', 'Oreo', 'Red Velvet'], toppingPrice: 1000, maxTopping: 1 },
-      { id: 6, name: 'Ropang Manis Reguler', price: 5000, category: 'ropang', emoji: '🥐', desc: 'Roti panggang manis (max 2 rasa + topping)', rasa: ['Coklat', 'Matcha', 'Tiramisu', 'Blueberry', 'Strawberry'], maxRasa: 2, topping: ['Meses', 'Keju', 'Oreo', 'Red Velvet'], maxTopping: 1 },
-      { id: 7, name: 'Ropang Asin Reguler', price: 5000, category: 'ropang', emoji: '🥐', desc: 'Roti panggang asin', options: ['Saus Sambal', 'Saus Tomat'] },
+      { id: 5, name: 'Ropang Manis Mini', price: 2000, category: 'ropang', emoji: '🥪', desc: 'pokonya mini', rasa: ['Coklat', 'Matcha', 'Tiramisu', 'Blueberry', 'Strawberry'], maxRasa: 1, topping: ['Meses', 'Keju', 'Oreo', 'Red Velvet'], toppingPrice: 1000, maxTopping: 1 },
+      { id: 6, name: 'Ropang Manis Reguler', price: 5000, category: 'ropang', emoji: '🥪', desc: 'jangan maruk!capek ngedit, max 2 rasa+topping', rasa: ['Coklat', 'Matcha', 'Tiramisu', 'Blueberry', 'Strawberry'], maxRasa: 2, topping: ['Meses', 'Keju', 'Oreo', 'Red Velvet'], maxTopping: 1 },
+      { id: 7, name: 'Ropang Asin Reguler', price: 5000, category: 'ropang', emoji: '🥪', desc: 'bule bilang ini sandwich', options: ['Saus Sambal', 'Saus Tomat'] },
 
       // MIE
       { id: 8, name: 'Sedaap Goreng', price: 6000, category: 'mie', emoji: '🍜', desc: 'Mie Sedaap goreng' },
@@ -142,9 +142,9 @@
       { id: 16, name: 'Intermie', price: 4000, category: 'mie', emoji: '🍜', desc: 'Mie Intermie' },
 
       // JAJANAN
-      { id: 23, name: 'Cheese Roll', price: 5000, category: 'jajanan', emoji: '🌮', desc: 'Cheese roll Ghanghib (max 2 rasa)', rasa: ['Coklat', 'Strawberry', 'Cappuccino', 'Matcha', 'Taro', 'Tiramisu'], maxRasa: 2 },
-      { id: 24, name: 'Piscok', price: 5000, category: 'jajanan', emoji: '🌮', desc: 'Piscok Ghanghib (max 2 rasa)', rasa: ['Coklat', 'Strawberry', 'Cappuccino', 'Matcha', 'Taro', 'Tiramisu'], maxRasa: 2 },
-      { id: 25, name: 'Ubi Roll', price: 5000, category: 'jajanan', emoji: '🌯', desc: 'Ubi roll Ghanghib (max 2 rasa)', rasa: ['Coklat', 'Strawberry', 'Cappuccino', 'Matcha', 'Taro', 'Tiramisu'], maxRasa: 2 },
+      { id: 23, name: 'Cheese Roll', price: 5000, category: 'jajanan', emoji: '🧀', desc: 'Cheese roll Ghanghib (max 2 rasa)', rasa: ['Coklat', 'Strawberry', 'Cappuccino', 'Matcha', 'Taro', 'Tiramisu'], maxRasa: 2 },
+      { id: 24, name: 'Piscok', price: 5000, category: 'jajanan', emoji: '🧀', desc: 'Piscok Ghanghib (max 2 rasa)', rasa: ['Coklat', 'Strawberry', 'Cappuccino', 'Matcha', 'Taro', 'Tiramisu'], maxRasa: 2 },
+      { id: 25, name: 'Ubi Roll', price: 5000, category: 'jajanan', emoji: '🍠', desc: 'Ubi roll Ghanghib (max 2 rasa)', rasa: ['Coklat', 'Strawberry', 'Cappuccino', 'Matcha', 'Taro', 'Tiramisu'], maxRasa: 2 },
 
       // ES
       { id: 26, name: 'Es Krim S', price: 3000, category: 'es', emoji: '🍨', desc: 'Es krim size S (original)' },
@@ -153,12 +153,12 @@
       { id: 29, name: 'Es Cemil Brownies', price: 15000, category: 'es', emoji: '🍫', desc: 'Es cemil brownies premium' },
       { id: 30, name: "Tresno 'Cone S", price: 5000, category: 'es', emoji: '🍦', desc: "Tresno cone size S" },
       { id: 31, name: "Tresno 'Cone M", price: 8000, category: 'es', emoji: '🍦', desc: "Tresno cone size M" },
-      { id: 32, name: 'Espressia Durian', price: 7000, category: 'es', emoji: '🍮', desc: 'Es durian Espressia' },
+      { id: 32, name: 'Espressia Durian', price: 7000, category: 'es', emoji: '🍻', desc: 'Es durian Espressia' },
 
       // MINUMAN
       { id: 33, name: 'Teajus', price: 2000, category: 'minuman', emoji: '🥤', desc: 'Teh jus segar', options: ['Gula Batu', 'Melati'] },
       { id: 34, name: 'Kopi Keplak', price: 3000, category: 'minuman', emoji: '☕', desc: 'Kopi keplak' },
-      { id: 35, name: 'Teh', price: 3000, category: 'minuman', emoji: '🫖', desc: 'Teh hangat', suhuOptions: ['Es', 'Panas'] },
+      { id: 35, name: 'Teh', price: 3000, category: 'minuman', emoji: '🍵', desc: 'Teh hangat', suhuOptions: ['Es', 'Panas'] },
       { id: 36, name: 'Pop Ice', price: 3000, category: 'minuman', emoji: '🧊', desc: 'Pop ice', options: ['Mangga', 'Bubblegum', 'Vanilla', 'Coklat'] },
       { id: 37, name: 'Nutrisari', price: 3000, category: 'minuman', emoji: '🥛', desc: 'Nutrisari', options: ['Semangka', 'Cocopandan', 'Kelapa Muda'] },
       { id: 38, name: 'Susu Jahe', price: 3000, category: 'minuman', emoji: '🥛', desc: 'Susu jahe', suhuOptions: ['Es', 'Panas'] },
