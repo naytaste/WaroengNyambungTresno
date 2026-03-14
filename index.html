@@ -1,96 +1,296 @@
-<!DOCTYPE html><html lang="id">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WAROENG NYAMBUNG TRESNO</title>
-<script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100"><div class="max-w-2xl mx-auto p-4">
-  <h1 class="text-3xl font-bold text-center">WAROENG NYAMBUNG TRESNO</h1>
-  <p class="text-center text-gray-600 mb-6">ONE BITE, FALL IN TRESNO!</p>  <div class="bg-white p-4 rounded-2xl shadow mb-6">
-    <label class="font-semibold">Nama Pemesan</label>
-    <input id="customerName" type="text" class="w-full border p-2 rounded-xl mt-1" placeholder="Masukkan nama...">
-  </div>  <div id="menuContainer" class="space-y-6"></div>  <div class="mt-8 bg-white p-4 rounded-2xl shadow">
-    <h2 class="font-bold text-lg mb-3">Keranjang</h2>
-    <ul id="cartItems" class="text-sm space-y-2"></ul>
-    <p class="font-bold mt-3">Total: Rp <span id="total">0</span></p>
-    <button onclick="checkout()" class="w-full mt-4 bg-green-600 text-white py-3 rounded-2xl text-lg">Bayar Sekarang</button>
+<!doctype html>
+<html lang="id" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Menu Order</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Poppins', sans-serif; }
+    .cart-bounce { animation: bounce 0.3s ease; }
+    @keyframes bounce {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+    .fade-in { animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .slide-up { animation: slideUp 0.4s ease; }
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+ </head>
+ <body class="h-full bg-amber-50 overflow-auto">
+  <div id="app" class="w-full min-h-full flex flex-col">
+   <!-- Header -->
+   <header class="bg-gradient-to-r from-orange-600 to-red-600 text-white p-4 sticky top-0 z-40 shadow-lg">
+    <div class="max-w-lg mx-auto flex items-center justify-between">
+     <div>
+      <h1 id="restaurant-name" class="text-xl font-bold">🍽️ Waroeng Nyambung Tresno</h1>
+      <p id="welcome-text" class="text-orange-100 text-sm">One Bite, Fall in Tresno! 💛</p>
+     </div><button onclick="toggleCart()" class="relative bg-white/20 hover:bg-white/30 p-3 rounded-full transition-all">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+      </svg><span id="cart-count" class="absolute -top-1 -right-1 bg-yellow-400 text-orange-900 text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center hidden">0</span> </button>
+    </div>
+   </header><!-- Table Number Input -->
+   <div class="bg-white border-b border-orange-200 p-3">
+    <div class="max-w-lg mx-auto flex items-center gap-3">
+     <span class="text-orange-600 font-medium text-sm">📍 Nomor Meja:</span> <input type="text" id="table-number" placeholder="Contoh: 5" class="flex-1 px-3 py-2 border-2 border-orange-200 rounded-lg focus:border-orange-500 focus:outline-none text-center font-bold text-lg max-w-[100px]">
+    </div>
+   </div><!-- Category Tabs -->
+   <div class="bg-white border-b border-orange-100 sticky top-[88px] z-30">
+    <div class="max-w-lg mx-auto flex overflow-x-auto py-2 px-2 gap-2 scrollbar-hide">
+     <button onclick="filterCategory('all')" class="category-btn active flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium bg-orange-600 text-white transition-all"> Semua </button> <button onclick="filterCategory('frozen')" class="category-btn flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium bg-orange-100 text-orange-700 hover:bg-orange-200 transition-all"> ❄️ Frozen </button> <button onclick="filterCategory('snack')" class="category-btn flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium bg-orange-100 text-orange-700 hover:bg-orange-200 transition-all"> 🍟 Snack </button> <button onclick="filterCategory('makanan')" class="category-btn flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium bg-orange-100 text-orange-700 hover:bg-orange-200 transition-all"> 🍚 Makanan </button> <button onclick="filterCategory('minuman')" class="category-btn flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium bg-orange-100 text-orange-700 hover:bg-orange-200 transition-all"> 🥤 Minuman </button>
+    </div>
+   </div><!-- Menu Grid -->
+   <main class="flex-1 p-4">
+    <div id="menu-grid" class="max-w-lg mx-auto grid grid-cols-2 gap-3">
+     <!-- Menu items will be rendered here -->
+    </div>
+   </main><!-- Cart Panel (Overlay) -->
+   <div id="cart-overlay" class="fixed inset-0 bg-black/50 z-50 hidden" onclick="toggleCart()"></div>
+   <div id="cart-panel" class="fixed bottom-0 left-0 right-0 bg-white rounded-t-3xl z-50 transform translate-y-full transition-transform duration-300 max-h-[80%] flex flex-col">
+    <div class="p-4 border-b border-gray-200">
+     <div class="flex items-center justify-between">
+      <h2 class="text-lg font-bold text-gray-800">🛒 Keranjang Anda</h2><button onclick="toggleCart()" class="text-gray-500 hover:text-gray-700 p-2">
+       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+       </svg></button>
+     </div>
+    </div>
+    <div id="cart-items" class="flex-1 overflow-y-auto p-4">
+     <!-- Cart items -->
+    </div>
+    <div class="p-4 border-t border-gray-200 bg-gray-50">
+     <div class="flex justify-between items-center mb-3">
+      <span class="text-gray-600 font-medium">Total:</span> <span id="cart-total" class="text-2xl font-bold text-orange-600">Rp 0</span>
+     </div>
+     <div class="mb-3">
+      <label class="text-sm font-medium text-gray-700 block mb-2">Atas Nama Siapa?</label> <input type="text" id="customer-name" placeholder="Masukkan nama Anda" class="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-orange-500 focus:outline-none">
+     </div>
+     <div class="mb-3">
+      <label class="text-sm font-medium text-gray-700 block mb-2">Metode Pembayaran</label>
+      <div class="flex gap-2">
+       <label class="flex-1 flex items-center gap-2 p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all"> <input type="radio" name="payment-method" value="CASH" checked class="w-4 h-4"> <span class="font-medium">💵 CASH</span> </label> <label class="flex-1 flex items-center gap-2 p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all"> <input type="radio" name="payment-method" value="QRIS" class="w-4 h-4"> <span class="font-medium">📱 QRIS</span> </label>
+      </div>
+     </div>
+     <div class="mb-3">
+      <label class="text-sm font-medium text-gray-700 block mb-2">Catatan/Request Khusus</label> <textarea id="order-notes" placeholder="Contoh: tanpa es, extra pedas, dll" class="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-orange-500 focus:outline-none resize-none" rows="2"></textarea>
+     </div><button onclick="submitOrder()" id="submit-btn" class="w-full bg-gradient-to-r from-orange-600 to-red-600 text-white py-4 rounded-xl font-bold text-lg hover:from-orange-700 hover:to-red-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"> <span>Pesan Sekarang</span>
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+      </svg></button>
+    </div>
+   </div><!-- Success Modal -->
+   <div id="success-modal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl p-6 max-w-sm w-full text-center slide-up">
+     <div class="text-6xl mb-4">
+      ✅
+     </div>
+     <h3 class="text-xl font-bold text-gray-800 mb-2">Pesanan Terkirim!</h3>
+     <p class="text-gray-600 mb-4">Pesanan Anda sedang diproses. Silakan tunggu di meja Anda.</p>
+     <p id="order-number" class="text-orange-600 font-bold mb-4"></p><button onclick="closeSuccessModal()" class="w-full bg-orange-600 text-white py-3 rounded-xl font-bold hover:bg-orange-700 transition-all"> OK, Mengerti </button>
+    </div>
+   </div><!-- Floating Cart Button (Mobile) --> <button onclick="toggleCart()" id="floating-cart" class="fixed bottom-6 right-6 bg-gradient-to-r from-orange-600 to-red-600 text-white p-4 rounded-full shadow-lg z-40 hidden hover:scale-110 transition-transform">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+    </svg><span id="floating-cart-count" class="absolute -top-1 -right-1 bg-yellow-400 text-orange-900 text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center">0</span> </button> <!-- Admin Panel Button --> <button onclick="toggleAdminPanel()" id="admin-toggle" class="fixed top-4 right-4 bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 rounded-lg text-xs font-medium transition-colors z-30"> 👨‍💼 Admin </button> <!-- Admin Panel -->
+   <div id="admin-panel" class="fixed inset-0 bg-black/50 z-50 hidden overflow-y-auto p-4">
+    <div class="max-w-2xl mx-auto">
+     <div class="bg-white rounded-2xl p-6">
+      <div class="flex items-center justify-between mb-6">
+       <h2 class="text-2xl font-bold text-gray-800">📋 Daftar Pesanan</h2><button onclick="toggleAdminPanel()" class="text-gray-500 hover:text-gray-700 p-2">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg></button>
+      </div><!-- Filter Status -->
+      <div class="flex gap-2 mb-4 overflow-x-auto pb-2"><button onclick="filterAdminOrders('all')" class="admin-filter-btn active px-4 py-2 rounded-full text-sm font-medium bg-purple-600 text-white whitespace-nowrap">Semua</button> <button onclick="filterAdminOrders('pending')" class="admin-filter-btn px-4 py-2 rounded-full text-sm font-medium bg-gray-200 text-gray-700 hover:bg-gray-300 whitespace-nowrap">⏳ Pending</button> <button onclick="filterAdminOrders('completed')" class="admin-filter-btn px-4 py-2 rounded-full text-sm font-medium bg-gray-200 text-gray-700 hover:bg-gray-300 whitespace-nowrap">✅ Selesai</button>
+      </div><!-- Orders List -->
+      <div id="admin-orders-list" class="space-y-3 max-h-[70vh] overflow-y-auto"><!-- Orders will be rendered here -->
+      </div>
+     </div>
+    </div>
+   </div>
   </div>
-</div><script>
-const menuData = [
-  {category:"Basreng & Kentang", items:[
-    {name:"Basreng Basah", price:5000},
-    {name:"Kentang", price:5000},
-    {name:"Tahu Kocek", price:5000}
-  ]},
-  {category:"Ropang Mini", items:[
-    {name:"Ropang Manis Mini", price:2000},
-    {name:"Ropang Manis Reguler", price:5000},
-    {name:"Ropang Asin Reguler", price:5000}
-  ]},
-  {category:"Mie", items:[
-    {name:"Intermie", price:4000},
-    {name:"Indomie / Sedap Series", price:6000}
-  ]},
-  {category:"Nasi & Ayam Korea", items:[
-    {name:"Nasi Bakar", price:10000},
-    {name:"Ayam Classic Korea", price:12000},
-    {name:"Nasi Ayam Korea", price:15000}
-  ]},
-  {category:"Ice Cream", items:[
-    {name:"Es Krim S", price:3000},
-    {name:"Es Cemil M", price:5000},
-    {name:"Es Cemil L", price:10000}
-  ]},
-  {category:"Minuman", items:[
-    {name:"Teajus", price:2000},
-    {name:"Kopi Keplak", price:3000},
-    {name:"Pop Ice", price:3000},
-    {name:"Milo", price:4000}
-  ]}
-];
+  <script>
+    // Default configuration
+    const defaultConfig = {
+      restaurant_name: '🍽️ Waroeng Nyambung Tresno',
+      welcome_text: 'One Bite, Fall in Tresno! 💛',
+      primary_color: '#ea580c',
+      secondary_color: '#dc2626',
+      background_color: '#fffbeb',
+      text_color: '#1f2937',
+      accent_color: '#facc15'
+    };
 
-let cart = [];
-let total = 0;
+    // Menu data - WAROENG NYAMBUNG TRESNO
+    const menuItems = [
+      // ANEKA FROZEN
+      { id: 1, name: 'Aneka Frozen', price: 1000, category: 'frozen', emoji: '❄️', desc: 'Sosis, Kornet, Tempura, Otak-otak, Cireng Salju, Nugget, Sukoi, Dimsum, Pentol', options: ['Sosis', 'Kornet', 'Tempura', 'Otak-otak', 'Cireng Salju', 'Nugget', 'Sukoi', 'Dimsum', 'Pentol'] },
+      
+      // SNACK
+      { id: 2, name: 'Basreng Basah', price: 5000, category: 'snack', emoji: '🌶️', desc: 'Basreng basah krispy', options: ['Bumbu Balado', 'Bumbu BBQ', 'Bumbu Pedas', 'Bumbu Jagung', 'Chili Oil', 'Daun Jeruk'] },
+      { id: 3, name: 'Kentang Goreng', price: 5000, category: 'snack', emoji: '🍟', desc: 'Kentang potong goreng', options: ['Bumbu Balado', 'Bumbu BBQ', 'Bumbu Pedas', 'Bumbu Jagung', 'Chili Oil', 'Daun Jeruk'] },
+      { id: 4, name: 'Tahu Kocek', price: 5000, category: 'snack', emoji: '🧈', desc: 'Tahu goreng potong sambal' },
+      { id: 5, name: 'Ropang Manis Mini', price: 2000, category: 'snack', emoji: '🥐', desc: 'Roti pang manis mini', rasa: ['Blueberry', 'Strawberry', 'Coklat', 'Matcha', 'Tiramissu'] },
+      { id: 6, name: 'Ropang Manis Reguler', price: 5000, category: 'snack', emoji: '🥐', desc: 'Roti pang manis (bisa mix 2 rasa)', rasa: ['Blueberry', 'Strawberry', 'Coklat', 'Matcha', 'Tiramissu'], topping: ['Keju', 'Red Velvet', 'Oreo', 'Meses'] },
+      { id: 7, name: 'Ropang Asin Reguler', price: 5000, category: 'snack', emoji: '🥐', desc: 'Roti pang asin', options: ['Saus Sambal', 'Saus Tomat'] },
+      { id: 8, name: 'Piscok', price: 5000, category: 'snack', emoji: '🌮', desc: 'Pisang goreng - Jajanan Ghanghib' },
+      { id: 9, name: 'Cheese Roll', price: 5000, category: 'snack', emoji: '🌮', desc: 'Cheese roll - Jajanan Ghanghib' },
+      { id: 10, name: 'Ubi Roll', price: 5000, category: 'snack', emoji: '🌯', desc: 'Ubi roll - Jajanan Ghanghib', rasa: ['Coklat', 'Keju'], topping: ['Coklat', 'Strawberry', 'Taro', 'Cappuccino', 'Tiramissu', 'Matcha'] },
+      
+      // MAKANAN
+      { id: 11, name: 'Indomie', price: 4000, category: 'makanan', emoji: '🍜', desc: 'Mie kuah Indomie', varian: ['Ayam Bawang', 'Goreng', 'Rendang', 'Soto Koya Nagih', 'Soto Koya Pedas', 'Kari Ayam'], tingkatKepedan: ['Pedas', 'Tidak Pedas'] },
+      { id: 12, name: 'Indomie Premium', price: 6000, category: 'makanan', emoji: '🍜', desc: 'Mie kuah Indomie premium', varian: ['Ayam Bawang', 'Goreng', 'Rendang', 'Soto Koya Nagih', 'Soto Koya Pedas', 'Kari Ayam'], tingkatKepedan: ['Pedas', 'Tidak Pedas'] },
+      { id: 13, name: 'Sedap', price: 6000, category: 'makanan', emoji: '🍜', desc: 'Mie kuah Sedap', varian: ['Kari Ayam Spesial', 'Goreng'], tingkatKepedan: ['Pedas', 'Tidak Pedas'] },
+      { id: 14, name: 'Nasi Bakar - Ayam', price: 10000, category: 'makanan', emoji: '🍚', desc: 'Nasi bakar dengan ayam', isi: ['Ayam'], nasiVarian: ['Nasi Daun Jeruk', 'Nasi Goreng Garem'] },
+      { id: 15, name: 'Nasi Bakar - Tongkol', price: 10000, category: 'makanan', emoji: '🍚', desc: 'Nasi bakar dengan tongkol', isi: ['Tongkol'], nasiVarian: ['Nasi Daun Jeruk', 'Nasi Goreng Garem'] },
+      { id: 16, name: 'Nasi Bakar - Jamur', price: 10000, category: 'makanan', emoji: '🍚', desc: 'Nasi bakar dengan jamur', isi: ['Jamur'], nasiVarian: ['Nasi Daun Jeruk', 'Nasi Goreng Garem'] },
+      { id: 17, name: 'Nasi Bakar - Teri', price: 10000, category: 'makanan', emoji: '🍚', desc: 'Nasi bakar dengan teri', isi: ['Teri'], nasiVarian: ['Nasi Daun Jeruk', 'Nasi Goreng Garem'] },
+      { id: 18, name: 'Ayam Korea', price: 20000, category: 'makanan', emoji: '🍗', desc: 'Ayam Korea saus kental', varian: ['Spicy', 'Garlic Butter'] },
+      { id: 19, name: 'Nasi Ayam Korea', price: 15000, category: 'makanan', emoji: '🍛', desc: 'Nasi + Ayam Korea', varian: ['Spicy', 'Garlic Butter'] },
+      
+      // MINUMAN
+      { id: 20, name: 'Es Cemil S', price: 3000, category: 'minuman', emoji: '🍨', desc: 'Es cemil original size S' },
+      { id: 21, name: 'Es Cemil M', price: 5000, category: 'minuman', emoji: '🍨', desc: 'Es cemil original size M' },
+      { id: 22, name: 'Es Cemil L', price: 10000, category: 'minuman', emoji: '🍨', desc: 'Es cemil original size L' },
+      { id: 23, name: 'Tresno Cone S', price: 5000, category: 'minuman', emoji: '🍦', desc: 'Es cone Tresno size S' },
+      { id: 24, name: 'Tresno Cone M', price: 8000, category: 'minuman', emoji: '🍦', desc: 'Es cone Tresno size M' },
+      { id: 25, name: 'Espressia Durian', price: 7000, category: 'minuman', emoji: '🍮', desc: 'Es durian premium Espressia' }
+    ];
 
-function renderMenu(){
-  const container = document.getElementById("menuContainer");
-  menuData.forEach(cat => {
-    const section = document.createElement("div");
-    section.innerHTML = `<h2 class="text-xl font-bold mb-2">${cat.category}</h2>`;
+    // Cart state
+    let cart = [];
+    let currentCategory = 'all';
+    let allOrders = [];
+    let isSubmitting = false;
+    let adminFilterStatus = 'all';
 
-    cat.items.forEach(item => {
-      const div = document.createElement("div");
-      div.className = "bg-white p-4 rounded-2xl shadow mb-3";
-      div.innerHTML = `
-        <div class="flex justify-between items-center">
-          <div>
-            <h3 class="font-semibold">${item.name}</h3>
-            <p class="text-sm text-gray-500">Rp ${item.price}</p>
+    // Format currency
+    function formatCurrency(amount) {
+      return 'Rp ' + amount.toLocaleString('id-ID');
+    }
+
+    // Generate order ID
+    function generateOrderId() {
+      return 'ORD-' + Date.now().toString(36).toUpperCase();
+    }
+
+    // Render menu
+    function renderMenu() {
+      const grid = document.getElementById('menu-grid');
+      const filtered = currentCategory === 'all' 
+        ? menuItems 
+        : menuItems.filter(item => item.category === currentCategory);
+      
+      grid.innerHTML = filtered.map(item => {
+        const cartItem = cart.find(c => c.id === item.id);
+        const quantity = cartItem ? cartItem.quantity : 0;
+        
+        return `
+          <div class="bg-white rounded-xl shadow-md overflow-hidden fade-in hover:shadow-lg transition-shadow">
+            <div class="bg-gradient-to-br from-orange-100 to-amber-100 p-4 text-center">
+              <span class="text-4xl">${item.emoji}</span>
+            </div>
+            <div class="p-3">
+              <h3 class="font-bold text-gray-800 text-sm mb-1 line-clamp-1">${item.name}</h3>
+              <p class="text-xs text-gray-500 mb-2 line-clamp-2">${item.desc}</p>
+              <div class="flex items-center justify-between">
+                <span class="text-orange-600 font-bold text-sm">${formatCurrency(item.price)}</span>
+                ${quantity === 0 ? `
+                  <button onclick="addToCart(${item.id})" class="bg-orange-600 hover:bg-orange-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors">
+                    + Tambah
+                  </button>
+                ` : `
+                  <div class="flex items-center gap-2">
+                    <button onclick="updateQuantity(${item.id}, -1)" class="bg-gray-200 hover:bg-gray-300 text-gray-700 w-7 h-7 rounded-full flex items-center justify-center font-bold transition-colors">-</button>
+                    <span class="font-bold text-gray-800 w-5 text-center">${quantity}</span>
+                    <button onclick="updateQuantity(${item.id}, 1)" class="bg-orange-600 hover:bg-orange-700 text-white w-7 h-7 rounded-full flex items-center justify-center font-bold transition-colors">+</button>
+                  </div>
+                `}
+              </div>
+            </div>
           </div>
-          <button onclick="addToCart('${item.name}',${item.price})" class="bg-blue-500 text-white px-4 py-2 rounded-xl">Tambah</button>
-        </div>
-        <textarea id="note-${item.name}" placeholder="Tambahan / request khusus..." class="w-full border p-2 rounded-xl mt-2 text-sm"></textarea>`;
-  section.appendChild(div);
-});
+        `;
+      }).join('');
+    }
 
-container.appendChild(section);
+    // Filter category
+    function filterCategory(category) {
+      currentCategory = category;
+      
+      document.querySelectorAll('.category-btn').forEach(btn => {
+        btn.classList.remove('bg-orange-600', 'text-white', 'active');
+        btn.classList.add('bg-orange-100', 'text-orange-700');
+      });
+      
+      event.target.classList.remove('bg-orange-100', 'text-orange-700');
+      event.target.classList.add('bg-orange-600', 'text-white', 'active');
+      
+      renderMenu();
+    }
 
-}); }
+    // Add to cart
+    function addToCart(itemId) {
+      const item = menuItems.find(m => m.id === itemId);
+      if (!item) return;
+      
+      const existing = cart.find(c => c.id === itemId);
+      if (existing) {
+        existing.quantity++;
+      } else {
+        cart.push({ ...item, quantity: 1 });
+      }
+      
+      updateCartUI();
+      renderMenu();
+      
+      // Bounce animation
+      const countEl = document.getElementById('cart-count');
+      countEl.classList.add('cart-bounce');
+      setTimeout(() => countEl.classList.remove('cart-bounce'), 300);
+    }
 
-function addToCart(name, price){ const note = document.getElementById(note-${name})?.value || ""; cart.push({name, price, note}); total += price; renderCart(); }
+    // Update quantity
+    function updateQuantity(itemId, delta) {
+      const item = cart.find(c => c.id === itemId);
+      if (!item) return;
+      
+      item.quantity += delta;
+      if (item.quantity <= 0) {
+        cart = cart.filter(c => c.id !== itemId);
+      }
+      
+      updateCartUI();
+      renderMenu();
+      renderCartItems();
+    }
 
-function renderCart(){ const cartList = document.getElementById("cartItems"); cartList.innerHTML = ""; cart.forEach(item => { const li = document.createElement("li"); li.innerHTML = <strong>${item.name}</strong> - Rp ${item.price}<br><span class='text-gray-500'>${item.note}</span>; cartList.appendChild(li); }); document.getElementById("total").textContent = total; }
-
-function checkout(){ const name = document.getElementById("customerName").value; if(!name){ alert("Nama wajib diisi"); return; } if(cart.length === 0){ alert("Keranjang kosong"); return; }
-
-const orderData = { customer:name, items:cart, total:total, time:new Date().toLocaleString() };
-
-console.log("ORDER MASUK:", orderData); alert("Silakan bayar via QRIS. Setelah transfer, tunjukkan bukti ke kasir.");
-
-cart = []; total = 0; renderCart(); }
-
-renderMenu(); </script>
-
-</body>
-</html>
+    // Update cart UI
+    function updateCartUI() {
+      const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+      const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+      
+      const cartCount = document.getElementById('cart-count');
+      const floatingCart = document.getElementById('floating-cart');
+      const floatingCount = document.getElementById('floating-cart-count');
+      const cartTotal = document.getElementById('cart-total');
+      
+      if (totalItems > 0) {
+        cartCount.textContent = totalItems;
+        cartCount.classList.remove('hidden');
+        floatingCart.classList.remove('hidden');
+        floatingCount.textContent = totalItems;
+      } else {
+        cartCount.classList.add('hidden');
+        floatingCart.classLi
