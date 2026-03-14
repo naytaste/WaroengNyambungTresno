@@ -1,2 +1,76 @@
-one bite, fall in tresno!
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WAROENG NYAMBUNG TRESNO</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
 
+<div class="max-w-xl mx-auto p-4">
+  <h1 class="text-3xl font-bold text-center">WAROENG NYAMBUNG TRESNO</h1>
+  <p class="text-center text-gray-600 mb-6">ONE BITE, FALL IN TRESNO!</p>
+
+  <div class="bg-white p-4 rounded-xl shadow mb-4">
+    <label class="font-semibold">Nama Pemesan</label>
+    <input id="nama" type="text" class="w-full border p-2 rounded mt-2">
+  </div>
+
+  <div class="bg-white p-4 rounded-xl shadow mb-4">
+    <h2 class="font-bold mb-2">Basreng Basah - Rp 5.000</h2>
+    <textarea id="note1" placeholder="Tambahan / request khusus..." class="w-full border p-2 rounded mb-2"></textarea>
+    <button onclick="tambah('Basreng Basah',5000,'note1')" class="bg-blue-500 text-white px-4 py-2 rounded">Tambah</button>
+  </div>
+
+  <div class="bg-white p-4 rounded-xl shadow mb-4">
+    <h2 class="font-bold mb-2">Kentang - Rp 5.000</h2>
+    <textarea id="note2" placeholder="Tambahan / request khusus..." class="w-full border p-2 rounded mb-2"></textarea>
+    <button onclick="tambah('Kentang',5000,'note2')" class="bg-blue-500 text-white px-4 py-2 rounded">Tambah</button>
+  </div>
+
+  <div class="bg-white p-4 rounded-xl shadow mb-4">
+    <h2 class="font-bold mb-2">Mie (6.000)</h2>
+    <textarea id="note3" placeholder="Varian mie + request..." class="w-full border p-2 rounded mb-2"></textarea>
+    <button onclick="tambah('Mie',6000,'note3')" class="bg-blue-500 text-white px-4 py-2 rounded">Tambah</button>
+  </div>
+
+  <div class="bg-white p-4 rounded-xl shadow">
+    <h2 class="font-bold mb-2">Keranjang</h2>
+    <ul id="keranjang" class="text-sm mb-2"></ul>
+    <p class="font-bold">Total: Rp <span id="total">0</span></p>
+    <button onclick="checkout()" class="bg-green-600 text-white w-full py-2 rounded mt-3">Checkout</button>
+  </div>
+</div>
+
+<script>
+let total = 0;
+let items = [];
+
+function tambah(nama,harga,noteId){
+  let note = document.getElementById(noteId).value;
+  items.push({nama,harga,note});
+  total += harga;
+  render();
+}
+
+function render(){
+  let list = document.getElementById("keranjang");
+  list.innerHTML="";
+  items.forEach(i=>{
+    list.innerHTML += `<li>${i.nama} - Rp ${i.harga}<br><small>${i.note}</small></li>`;
+  });
+  document.getElementById("total").innerText = total;
+}
+
+function checkout(){
+  if(items.length==0){ alert("Keranjang kosong"); return; }
+  alert("Silakan bayar via QRIS dan tunjukkan bukti ke kasir.");
+  items=[];
+  total=0;
+  render();
+}
+</script>
+
+</body>
+</html>
