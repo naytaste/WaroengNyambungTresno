@@ -30,31 +30,26 @@
   <style>body { box-sizing: border-box; }</style>
  </head>
  <body class="h-full bg-amber-50 overflow-auto">
-  <div id="app" class="w-full h-full flex flex-col">
-   <!-- Header -->
+  <div id="app" class="w-full h-full flex flex-col"><!-- Header -->
    <header class="bg-gradient-to-r from-pink-600 to-rose-600 text-white p-4 sticky top-0 z-40 shadow-lg">
     <div class="max-w-lg mx-auto flex items-center justify-between">
      <div>
       <h1 id="restaurant-name" class="text-xl font-bold">🍽️ Waroeng Nyambung Tresno</h1><span class="text-pink-100 text-sm">One Bite, Fall in Tresno! 💛</span>
      </div><button onclick="toggleCart()" class="relative bg-white/20 hover:bg-white/30 p-3 rounded-full transition-all">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
       </svg><span id="cart-count" class="absolute -top-1 -right-1 bg-yellow-400 text-orange-900 text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center hidden">0</span> </button>
     </div>
    </header><!-- Table Number Input -->
    <div class="bg-white border-b border-pink-200 p-3">
-    <div class="max-w-lg mx-auto flex items-center gap-3">
-     <span class="text-pink-600 font-medium text-sm">📍 Nomor Meja:</span> <input type="text" id="table-number" placeholder="Contoh: 5" class="flex-1 px-3 py-2 border-2 border-pink-200 rounded-lg focus:border-pink-500 focus:outline-none text-center font-bold text-lg max-w-[100px]">
+    <div class="max-w-lg mx-auto flex items-center gap-3"><span class="text-pink-600 font-medium text-sm">📍 Nomor Meja:</span> <input type="text" id="table-number" placeholder="Contoh: 5" class="flex-1 px-3 py-2 border-2 border-pink-200 rounded-lg focus:border-pink-500 focus:outline-none text-center font-bold text-lg max-w-[100px]">
     </div>
    </div><!-- Category Tabs -->
    <div class="bg-white border-b border-pink-100 sticky top-[88px] z-30">
-    <div class="max-w-lg mx-auto flex overflow-x-auto py-2 px-2 gap-2 scrollbar-hide">
-     <button onclick="filterCategory('all')" class="category-btn active flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium bg-pink-600 text-white transition-all">Semua</button> <button onclick="filterCategory('makanan')" class="category-btn flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium bg-pink-100 text-pink-700 hover:bg-pink-200 transition-all">🍴 Makanan</button> <button onclick="filterCategory('ropang')" class="category-btn flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium bg-pink-100 text-pink-700 hover:bg-pink-200 transition-all">🥐 Ropang</button> <button onclick="filterCategory('mie')" class="category-btn flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium bg-pink-100 text-pink-700 hover:bg-pink-200 transition-all">🍜 Mie</button> <button onclick="filterCategory('jajanan')" class="category-btn flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium bg-pink-100 text-pink-700 hover:bg-pink-200 transition-all">🌮 Jajanan</button> <button onclick="filterCategory('es')" class="category-btn flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium bg-pink-100 text-pink-700 hover:bg-pink-200 transition-all">🍨 Es</button> <button onclick="filterCategory('minuman')" class="category-btn flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium bg-pink-100 text-pink-700 hover:bg-pink-200 transition-all">🥤 Minuman</button>
+    <div class="max-w-lg mx-auto flex overflow-x-auto py-2 px-2 gap-2 scrollbar-hide"><button onclick="filterCategory('all')" class="category-btn active flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium bg-pink-600 text-white transition-all">Semua</button> <button onclick="filterCategory('makanan')" class="category-btn flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium bg-pink-100 text-pink-700 hover:bg-pink-200 transition-all">🍴 Makanan</button> <button onclick="filterCategory('ropang')" class="category-btn flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium bg-pink-100 text-pink-700 hover:bg-pink-200 transition-all">🥐 Ropang</button> <button onclick="filterCategory('mie')" class="category-btn flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium bg-pink-100 text-pink-700 hover:bg-pink-200 transition-all">🍜 Mie</button> <button onclick="filterCategory('jajanan')" class="category-btn flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium bg-pink-100 text-pink-700 hover:bg-pink-200 transition-all">🌮 Jajanan</button> <button onclick="filterCategory('es')" class="category-btn flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium bg-pink-100 text-pink-700 hover:bg-pink-200 transition-all">🍨 Es</button> <button onclick="filterCategory('minuman')" class="category-btn flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium bg-pink-100 text-pink-700 hover:bg-pink-200 transition-all">🥤 Minuman</button>
     </div>
    </div><!-- Menu Grid -->
    <main class="flex-1 p-4 overflow-y-auto">
-    <div id="menu-grid" class="max-w-lg mx-auto grid grid-cols-2 gap-3 pb-20">
-     <!-- Menu items rendered here -->
+    <div id="menu-grid" class="max-w-lg mx-auto grid grid-cols-2 gap-3 pb-20"><!-- Menu items rendered here -->
     </div>
    </main><!-- Cart Panel (Overlay) -->
    <div id="cart-overlay" class="fixed inset-0 bg-black/50 z-50 hidden" onclick="toggleCart()"></div>
@@ -62,32 +57,24 @@
     <div class="p-4 border-b border-gray-200">
      <div class="flex items-center justify-between">
       <h2 class="text-lg font-bold text-gray-800">🛒 Keranjang Anda</h2><button onclick="toggleCart()" class="text-gray-500 hover:text-gray-700 p-2">
-       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
        </svg></button>
      </div>
     </div>
-    <div id="cart-items" class="flex-1 overflow-y-auto p-4">
-     <!-- Cart items rendered here -->
+    <div id="cart-items" class="flex-1 overflow-y-auto p-4"><!-- Cart items rendered here -->
     </div>
     <div class="p-4 border-t border-gray-200 bg-gray-50">
-     <div class="flex justify-between items-center mb-3">
-      <span class="text-gray-600 font-medium">Total:</span> <span id="cart-total" class="text-2xl font-bold text-pink-600">Rp 0</span>
+     <div class="flex justify-between items-center mb-3"><span class="text-gray-600 font-medium">Total:</span> <span id="cart-total" class="text-2xl font-bold text-pink-600">Rp 0</span>
      </div>
-     <div class="mb-3">
-      <label class="text-sm font-medium text-gray-700 block mb-2">Atas Nama Siapa?</label> <input type="text" id="customer-name" placeholder="Masukkan nama Anda" class="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-pink-500 focus:outline-none">
+     <div class="mb-3"><label class="text-sm font-medium text-gray-700 block mb-2">Atas Nama Siapa?</label> <input type="text" id="customer-name" placeholder="Masukkan nama Anda" class="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-pink-500 focus:outline-none">
      </div>
-     <div class="mb-3">
-      <label class="text-sm font-medium text-gray-700 block mb-2">Metode Pembayaran</label>
-      <div class="flex gap-2">
-       <label class="flex-1 flex items-center gap-2 p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all"> <input type="radio" name="payment-method" value="CASH" checked class="w-4 h-4"> <span class="font-medium">💵 CASH</span> </label> <label class="flex-1 flex items-center gap-2 p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all"> <input type="radio" name="payment-method" value="QRIS" class="w-4 h-4"> <span class="font-medium">📱 QRIS</span> </label>
+     <div class="mb-3"><label class="text-sm font-medium text-gray-700 block mb-2">Metode Pembayaran</label>
+      <div class="flex gap-2"><label class="flex-1 flex items-center gap-2 p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all"> <input type="radio" name="payment-method" value="CASH" checked class="w-4 h-4"> <span class="font-medium">💵 CASH</span> </label> <label class="flex-1 flex items-center gap-2 p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all"> <input type="radio" name="payment-method" value="QRIS" class="w-4 h-4"> <span class="font-medium">📱 QRIS</span> </label>
       </div>
      </div>
-     <div class="mb-3">
-      <label class="text-sm font-medium text-gray-700 block mb-2">Catatan/Request Khusus</label> <textarea id="order-notes" placeholder="Contoh: tanpa es, extra pedas, dll" class="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-pink-500 focus:outline-none resize-none" rows="2"></textarea>
+     <div class="mb-3"><label class="text-sm font-medium text-gray-700 block mb-2">Catatan/Request Khusus</label> <textarea id="order-notes" placeholder="Contoh: tanpa es, extra pedas, dll" class="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-pink-500 focus:outline-none resize-none" rows="2"></textarea>
      </div><button onclick="submitOrder()" id="submit-btn" class="w-full bg-gradient-to-r from-pink-600 to-rose-600 text-white py-4 rounded-xl font-bold text-lg hover:from-pink-700 hover:to-rose-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"> <span>Pesan Sekarang</span>
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
       </svg></button>
     </div>
    </div><!-- Success Modal -->
@@ -101,21 +88,19 @@
      <p id="order-number" class="text-pink-600 font-bold mb-4"></p><button onclick="closeSuccessModal()" class="w-full bg-pink-600 text-white py-3 rounded-xl font-bold hover:bg-pink-700 transition-all">OK, Mengerti</button>
     </div>
    </div><!-- Floating Cart Button --> <button onclick="toggleCart()" id="floating-cart" class="fixed bottom-6 right-6 bg-gradient-to-r from-pink-600 to-rose-600 text-white p-4 rounded-full shadow-lg z-40 hidden hover:scale-110 transition-transform">
-    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
     </svg><span id="floating-cart-count" class="absolute -top-1 -right-1 bg-yellow-400 text-orange-900 text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center">0</span> </button> <!-- Admin Toggle --> <button onclick="toggleAdminPanel()" id="admin-toggle" class="fixed top-4 right-4 bg-rose-600 hover:bg-rose-700 text-white px-3 py-2 rounded-lg text-xs font-medium transition-colors z-30">👨‍💼 Admin</button> <!-- Admin Panel -->
    <div id="customize-modal" class="fixed inset-0 bg-black/50 z-50 hidden overflow-y-auto p-4">
     <div class="max-w-sm mx-auto mt-8 bg-white rounded-2xl">
      <div class="p-4 border-b border-gray-200 flex items-center justify-between">
       <h3 id="customize-title" class="text-lg font-bold text-gray-800">Customize Item</h3><button onclick="closeCustomizeModal()" class="text-gray-500 hover:text-gray-700">
-       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
        </svg></button>
      </div>
-     <div id="customize-content" class="p-4 space-y-4 max-h-[60vh] overflow-y-auto">
-      <!-- Customize options rendered here -->
+     <div id="customize-content" class="p-4 space-y-4 max-h-[60vh] overflow-y-auto"><!-- Customize options rendered here -->
      </div>
-     <div class="p-4 border-t border-gray-200 bg-gray-50 flex gap-2"><button onclick="closeCustomizeModal()" class="flex-1 px-4 py-3 border-2 border-gray-300 rounded-xl font-bold text-gray-700 hover:bg-gray-100 transition-colors">Batal</button><button onclick="addToCartFromModal()" class="flex-1 px-4 py-3 bg-pink-600 text-white rounded-xl font-bold hover:bg-pink-700 transition-colors">✅ Tambah ke Keranjang</button>
+     <div class="p-4 border-t border-gray-200 bg-gray-50 flex gap-2">
+      <button onclick="closeCustomizeModal()" class="flex-1 px-4 py-3 border-2 border-gray-300 rounded-xl font-bold text-gray-700 hover:bg-gray-100 transition-colors">Batal</button><button onclick="addToCartFromModal()" class="flex-1 px-4 py-3 bg-pink-600 text-white rounded-xl font-bold hover:bg-pink-700 transition-colors">✅ Tambah ke Keranjang</button>
      </div>
     </div>
    </div>
@@ -194,6 +179,7 @@
     let adminFilterStatus = 'all';
     let currentCustomizing = null;
     let customizationChoices = {};
+    let adminRefreshInterval = null;
 
     function formatCurrency(amount) {
       return 'Rp ' + amount.toLocaleString('id-ID');
@@ -706,13 +692,50 @@
 
     function toggleAdminPanel() {
       const panel = document.getElementById('admin-panel');
+      if (!panel) {
+        createAdminPanel();
+        return;
+      }
+
       if (panel.classList.contains('hidden')) {
         panel.classList.remove('hidden');
         adminFilterStatus = 'all';
+        startAutoRefresh();
         renderAdminOrders();
       } else {
         panel.classList.add('hidden');
+        stopAutoRefresh();
       }
+    }
+
+    function startAutoRefresh() {
+      if (adminRefreshInterval) return;
+      
+      adminRefreshInterval = setInterval(() => {
+        renderAdminOrders();
+        updateAdminStats();
+      }, 5000);
+    }
+
+    function stopAutoRefresh() {
+      if (adminRefreshInterval) {
+        clearInterval(adminRefreshInterval);
+        adminRefreshInterval = null;
+      }
+    }
+
+    function updateAdminStats() {
+      const total = allOrders.length;
+      const pending = allOrders.filter(o => o.status === 'pending').length;
+      const completed = allOrders.filter(o => o.status === 'completed').length;
+
+      const totalEl = document.getElementById('total-orders');
+      const pendingEl = document.getElementById('pending-orders');
+      const completedEl = document.getElementById('completed-orders');
+
+      if (totalEl) totalEl.textContent = total;
+      if (pendingEl) pendingEl.textContent = pending;
+      if (completedEl) completedEl.textContent = completed;
     }
 
     function filterAdminOrders(status) {
@@ -731,6 +754,7 @@
 
     function renderAdminOrders() {
       const container = document.getElementById('admin-orders-list');
+      if (!container) return;
 
       const filtered = adminFilterStatus === 'all'
         ? allOrders
@@ -759,17 +783,17 @@
               <p class="text-sm text-gray-600 mb-1"><strong>Nama:</strong> ${order.customer_name}</p>
               <p class="text-sm text-gray-600 mb-1"><strong>Pesanan:</strong> ${order.items}</p>
               <p class="text-sm text-gray-600 mb-1"><strong>Total:</strong> <span class="font-bold text-pink-600">${formatCurrency(order.total_price)}</span></p>
-              <p class="text-sm text-gray-600 mb-1"><strong>Pembayaran:</strong> ${order.payment_method}</p>
+              <p class="text-sm text-gray-600 mb-1"><strong>Pembayaran:</strong> <span class="font-bold ${order.payment_method === 'CASH' ? 'text-blue-600' : 'text-purple-600'}">${order.payment_method}</span></p>
               ${order.notes && order.notes !== '-' ? `<p class="text-sm text-gray-600"><strong>Catatan:</strong> ${order.notes}</p>` : ''}
             </div>
 
             <div class="flex gap-2">
               ${!isCompleted ? `
-                <button onclick="markOrderCompleted('${order.__backendId}')" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg font-medium text-sm transition-colors">
+                <button onclick="markOrderCompleted('${order.__backendId}')" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg font-medium text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                   ✅ Tandai Selesai
                 </button>
               ` : ''}
-              <button onclick="deleteOrder('${order.__backendId}')" class="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg font-medium text-sm transition-colors">
+              <button onclick="deleteOrder('${order.__backendId}')" class="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg font-medium text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                 🗑️ Hapus
               </button>
             </div>
@@ -782,15 +806,23 @@
       const order = allOrders.find(o => o.__backendId === backendId);
       if (!order) return;
 
+      const btn = event.target;
+      btn.disabled = true;
+      btn.innerHTML = '<svg class="animate-spin w-4 h-4 inline" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
+
       try {
         const result = await window.dataSdk.update({ ...order, status: 'completed' });
         if (result.isOk) {
-          showToast('Pesanan ditandai selesai!', 'success');
+          showToast('✅ Pesanan ditandai selesai!', 'success');
         } else {
-          showToast('Gagal update pesanan', 'error');
+          showToast('❌ Gagal update pesanan', 'error');
+          btn.disabled = false;
+          btn.innerHTML = '✅ Tandai Selesai';
         }
       } catch (error) {
-        showToast('Terjadi kesalahan', 'error');
+        showToast('❌ Terjadi kesalahan', 'error');
+        btn.disabled = false;
+        btn.innerHTML = '✅ Tandai Selesai';
       }
     }
 
@@ -798,17 +830,38 @@
       const order = allOrders.find(o => o.__backendId === backendId);
       if (!order) return;
 
-      if (confirm(`Hapus pesanan ${order.order_id}?`)) {
-        try {
-          const result = await window.dataSdk.delete(order);
-          if (result.isOk) {
-            showToast('Pesanan dihapus!', 'success');
-          } else {
-            showToast('Gagal hapus pesanan', 'error');
-          }
-        } catch (error) {
-          showToast('Terjadi kesalahan', 'error');
+      const btn = event.target;
+      
+      // Two-step delete: first click shows confirmation
+      if (!btn.dataset.confirming) {
+        btn.dataset.confirming = 'true';
+        btn.innerHTML = '⚠️ Yakin? Klik lagi';
+        btn.classList.add('ring-2', 'ring-red-500');
+        
+        setTimeout(() => {
+          btn.removeAttribute('data-confirming');
+          btn.innerHTML = '🗑️ Hapus';
+          btn.classList.remove('ring-2', 'ring-red-500');
+        }, 3000);
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = '<svg class="animate-spin w-4 h-4 inline" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
+
+      try {
+        const result = await window.dataSdk.delete(order);
+        if (result.isOk) {
+          showToast('🗑️ Pesanan dihapus!', 'success');
+        } else {
+          showToast('❌ Gagal hapus pesanan', 'error');
+          btn.disabled = false;
+          btn.innerHTML = '🗑️ Hapus';
         }
+      } catch (error) {
+        showToast('❌ Terjadi kesalahan', 'error');
+        btn.disabled = false;
+        btn.innerHTML = '🗑️ Hapus';
       }
     }
 
@@ -827,6 +880,7 @@
       onDataChanged(data) {
         allOrders = data;
         renderAdminOrders();
+        updateAdminStats();
       }
     };
 
@@ -861,9 +915,10 @@
 
       renderMenu();
       updateCartUI();
+      updateAdminStats();
     }
 
     init();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9dc43a5d5503f8c6',t:'MTc3MzUwMTI2NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9dc4486757cffd14',t:'MTc3MzUwMTg0MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
