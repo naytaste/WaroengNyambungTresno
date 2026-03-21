@@ -922,4 +922,40 @@
   </script>
  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9dc4486757cffd14',t:'MTc3MzUwMTg0MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
+}
+<!-- Contoh Form Pemesanan -->
+<h3>Form Pemesanan</h3>
+<form id="orderForm">
+    <input type="text" name="nama" placeholder="Nama Anda" required><br><br>
+    <textarea name="alamat" placeholder="Alamat Lengkap" required></textarea><br><br>
+    <input type="text" name="pesanan" placeholder="Menu yang dipesan" required><br><br>
+    <input type="number" name="harga" placeholder="Total Transfer (Rp)" required><br><br>
+    <button type="submit">Kirim Pesanan</button>
+</form>
 
+<div id="message"></div>
+
+<script>
+    // PASTE WEB_APP_URL ANDA DI SINI
+    var SCRIPT_URL = "https://script.google.com/macros/s/YOUR_SCRIPT_ID_HERE/exec";
+
+    document.getElementById('orderForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        var formData = new FormData(this);
+        
+        fetch(SCRIPT_URL, {
+            method: "POST",
+            body: formData
+        })
+        .then(response => response.text())
+        .then(result => {
+            document.getElementById('message').innerText = "Pesanan terkirim! Tunggu konfirmasi admin.";
+            document.getElementById('orderForm').reset();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('message').innerText = "Gagal mengirim pesanan.";
+        });
+    });
+</script>
