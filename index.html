@@ -1,150 +1,925 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Waroeng Nyambung Tresno</title>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: Arial, sans-serif; background: #f5f5dc; padding: 20px; }
-        .container { max-width: 500px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        h1 { text-align: center; color: #8b4513; margin-bottom: 20px; }
-        h2 { color: #d2691e; margin-top: 20px; margin-bottom: 10px; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; }
-        input, textarea, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
-        button { width: 100%; padding: 15px; background: #8b4513; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; }
-        button:hover { background: #a0522d; }
-        .menu-item { background: #fff8dc; padding: 15px; margin-bottom: 10px; border-radius: 5px; }
-        .menu-item h3 { color: #8b4513; }
-        .menu-item p { color: #666; }
-        .price { font-size: 18px; font-weight: bold; color: #d2691e; }
-        #nota { display: none; background: #fff8dc; padding: 20px; margin-top: 20px; border-radius: 5px; }
-        #nota h3 { color: #8b4513; border-bottom: 2px solid #8b4513; padding-bottom: 10px; margin-bottom: 15px; }
-        .nota-item { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px dashed #ccc; }
-        .nota-total { font-weight: bold; font-size: 18px; margin-top: 15px; text-align: right; }
-        #status { margin-top: 15px; padding: 10px; border-radius: 5px; text-align: center; }
-        .success { background: #d4edda; color: #155724; }
-        .error { background: #f8d7da; color: #721c24; }
-        .menu-img { width: 100%; height: 150px; object-fit: cover; border-radius: 5px; margin-bottom: 10px; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>🍜 Waroeng Nyambung Tresno</h1>
-        
-        <!-- DAFTAR MENU -->
-        <h2>📋 Menu Kami</h2>
-        <div class="menu-item">
-            <h3>Nasi Goreng Spesial</h3>
-            <p>Nasi goreng dengan ayam, telur, dan bumbu rahasia</p>
-            <p class="price">Rp 15.000</p>
-            <button onclick="pilihMenu('Nasi Goreng Spesial', 15000)">Pilih</button>
-        </div>
-        <div class="menu-item">
-            <h3>Mie Goreng Jawa</h3>
-            <p>Mie kuning dengan bumbu kecap dan ayam suwir</p>
-            <p class="price">Rp 12.000</p>
-            <button onclick="pilihMenu('Mie Goreng Jawa', 12000)">Pilih</button>
-        </div>
-        <div class="menu-item">
-            <h3>Ayam Bakar</h3>
-            <p>Ayam bakar dengan sambal dan lalapan</p>
-            <p class="price">Rp 20.000</p>
-            <button onclick="pilihMenu('Ayam Bakar', 20000)">Pilih</button>
-        </div>
-        <div class="menu-item">
-            <h3>Es Teh Manis</h3>
-            <p>Es teh manis segar</p>
-            <p class="price">Rp 5.000</p>
-            <button onclick="pilihMenu('Es Teh Manis', 5000)">Pilih</button>
-        </div>
-        
-        <!-- FORM PEMESANAN -->
-        <h2>📝 Form Pemesanan</h2>
-        <form id="orderForm">
-            <div class="form-group">
-                <label>Nama:</label>
-                <input type="text" id="nama" required placeholder="Nama Anda">
-            </div>
-            <div class="form-group">
-                <label>Alamat:</label>
-                <textarea id="alamat" required placeholder="Alamat lengkap"></textarea>
-            </div>
-            <div class="form-group">
-                <label>Pesanan:</label>
-                <input type="text" id="pesanan" required placeholder="Menu yang dipesan">
-            </div>
-            <div class="form-group">
-                <label>Total Harga (Rp):</label>
-                <input type="number" id="total" required placeholder="0">
-            </div>
-            <button type="submit">📤 Kirim Pesanan</button>
-        </form>
-        
-        <!-- NOTA & STATUS -->
-        <div id="nota">
-            <h3>📄 Pesanan Anda</h3>
-            <div id="nota-content"></div>
-            <div class="nota-total">Total: Rp <span id="nota-total">0</span></div>
-        </div>
-        
-        <div id="status"></div>
-        
-        <!-- LINK KE ADMIN -->
-        <p style="text-align: center; margin-top: 30px;">
-            <a href="admin.html">🔐 Halaman Admin</a>
-        </p>
+<!doctype html>
+<html lang="id" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Menu Order - WAROENG NYAMBUNG TRESNO</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Poppins', sans-serif; }
+    .cart-bounce { animation: bounce 0.3s ease; }
+    @keyframes bounce {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+    .fade-in { animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .slide-up { animation: slideUp 0.4s ease; }
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js" type="text/javascript"></script>
+  <style>body { box-sizing: border-box; }</style>
+ </head>
+ <body class="h-full bg-amber-50 overflow-auto">
+  <div id="app" class="w-full h-full flex flex-col"><!-- Header -->
+   <header class="bg-gradient-to-r from-pink-600 to-rose-600 text-white p-4 sticky top-0 z-40 shadow-lg">
+    <div class="max-w-lg mx-auto flex items-center justify-between">
+     <div>
+      <h1 id="restaurant-name" class="text-xl font-bold">🍽️ WAROENG NYAMBUNG TRESNO</h1><span class="text-pink-100 text-sm">One Bite, Fall in Tresno! 💛</span>
+     </div><button onclick="toggleCart()" class="relative bg-white/20 hover:bg-white/30 p-3 rounded-full transition-all">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+      </svg><span id="cart-count" class="absolute -top-1 -right-1 bg-yellow-400 text-orange-900 text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center hidden">0</span> </button>
     </div>
+   </header><!-- Table Number Input -->
+   <div class="bg-white border-b border-pink-200 p-3">
+    <div class="max-w-lg mx-auto flex items-center gap-3"><span class="text-pink-600 font-medium text-sm">📌 Nama Pelanggan:</span> <input type="text" id="table-number" placeholder="Contoh: 5" class="flex-1 px-3 py-2 border-2 border-pink-200 rounded-lg focus:border-pink-500 focus:outline-none text-center font-bold text-lg max-w-[100px]">
+    </div>
+   </div><!-- Category Tabs -->
+   <div class="bg-white border-b border-pink-100 sticky top-[88px] z-30">
+    <div class="max-w-lg mx-auto flex overflow-x-auto py-2 px-2 gap-2 scrollbar-hide"><button onclick="filterCategory('all')" class="category-btn active flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium bg-pink-600 text-white transition-all">Semua</button> <button onclick="filterCategory('makanan')" class="category-btn flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium bg-pink-100 text-pink-700 hover:bg-pink-200 transition-all">🍴 Makanan</button> <button onclick="filterCategory('ropang')" class="category-btn flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium bg-pink-100 text-pink-700 hover:bg-pink-200 transition-all">🥐 Ropang</button> <button onclick="filterCategory('mie')" class="category-btn flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium bg-pink-100 text-pink-700 hover:bg-pink-200 transition-all">🍜 Mie</button> <button onclick="filterCategory('jajanan')" class="category-btn flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium bg-pink-100 text-pink-700 hover:bg-pink-200 transition-all">🌮 Jajanan</button> <button onclick="filterCategory('es')" class="category-btn flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium bg-pink-100 text-pink-700 hover:bg-pink-200 transition-all">🍨 Es</button> <button onclick="filterCategory('minuman')" class="category-btn flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium bg-pink-100 text-pink-700 hover:bg-pink-200 transition-all">🥤 Minuman</button>
+    </div>
+   </div><!-- Menu Grid -->
+   <main class="flex-1 p-4 overflow-y-auto">
+    <div id="menu-grid" class="max-w-lg mx-auto grid grid-cols-2 gap-3 pb-20"><!-- Menu items rendered here -->
+    </div>
+   </main><!-- Cart Panel (Overlay) -->
+   <div id="cart-overlay" class="fixed inset-0 bg-black/50 z-50 hidden" onclick="toggleCart()"></div>
+   <div id="cart-panel" class="fixed bottom-0 left-0 right-0 bg-white rounded-t-3xl z-50 transform translate-y-full transition-transform duration-300 max-h-[80%] flex flex-col shadow-2xl">
+    <div class="p-4 border-b border-gray-200">
+     <div class="flex items-center justify-between">
+      <h2 class="text-lg font-bold text-gray-800">🛒 Keranjang Anda</h2><button onclick="toggleCart()" class="text-gray-500 hover:text-gray-700 p-2">
+       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+       </svg></button>
+     </div>
+    </div>
+    <div id="cart-items" class="flex-1 overflow-y-auto p-4"><!-- Cart items rendered here -->
+    </div>
+    <div class="p-4 border-t border-gray-200 bg-gray-50">
+     <div class="flex justify-between items-center mb-3"><span class="text-gray-600 font-medium">Total:</span> <span id="cart-total" class="text-2xl font-bold text-pink-600">Rp 0</span>
+     </div>
+     <div class="mb-3"><label class="text-sm font-medium text-gray-700 block mb-2">Atas Nama Siapa?</label> <input type="text" id="customer-name" placeholder="Masukkan nama Anda" class="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-pink-500 focus:outline-none">
+     </div>
+     <div class="mb-3"><label class="text-sm font-medium text-gray-700 block mb-2">Metode Pembayaran</label>
+      <div class="flex gap-2"><label class="flex-1 flex items-center gap-2 p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all"> <input type="radio" name="payment-method" value="CASH" checked class="w-4 h-4"> <span class="font-medium">💵 CASH</span> </label> <label class="flex-1 flex items-center gap-2 p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all"> <input type="radio" name="payment-method" value="QRIS" class="w-4 h-4"> <span class="font-medium">📱 QRIS</span> </label>
+      </div>
+     </div>
+     <div class="mb-3"><label class="text-sm font-medium text-gray-700 block mb-2">Catatan/Request Khusus</label> <textarea id="order-notes" placeholder="Contoh: tanpa es, extra pedas, dll" class="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-pink-500 focus:outline-none resize-none" rows="2"></textarea>
+     </div><button onclick="submitOrder()" id="submit-btn" class="w-full bg-gradient-to-r from-pink-600 to-rose-600 text-white py-4 rounded-xl font-bold text-lg hover:from-pink-700 hover:to-rose-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"> <span>Pesan Sekarang</span>
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+      </svg></button>
+    </div>
+   </div><!-- Success Modal -->
+   <div id="success-modal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl p-6 max-w-sm w-full text-center slide-up">
+     <div class="text-6xl mb-4">
+      ✅
+     </div>
+     <h3 class="text-xl font-bold text-gray-800 mb-2">Pesanan Terkirim!</h3>
+     <p class="text-gray-600 mb-4">Pesanan Anda sedah diproses. Silakan tunggu di meja Anda.</p>
+     <p id="order-number" class="text-pink-600 font-bold mb-4"></p><button onclick="closeSuccessModal()" class="w-full bg-pink-600 text-white py-3 rounded-xl font-bold hover:bg-pink-700 transition-all">OK, Mengerti</button>
+    </div>
+   </div><!-- Floating Cart Button --> <button onclick="toggleCart()" id="floating-cart" class="fixed bottom-6 right-6 bg-gradient-to-r from-pink-600 to-rose-600 text-white p-4 rounded-full shadow-lg z-40 hidden hover:scale-110 transition-transform">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+    </svg><span id="floating-cart-count" class="absolute -top-1 -right-1 bg-yellow-400 text-orange-900 text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center">0</span> </button> <!-- Admin Toggle --> <button onclick="toggleAdminPanel()" id="admin-toggle" class="fixed top-4 right-4 bg-rose-600 hover:bg-rose-700 text-white px-3 py-2 rounded-lg text-xs font-medium transition-colors z-30">👨‍💼 Admin</button> <!-- Admin Panel -->
+   <div id="customize-modal" class="fixed inset-0 bg-black/50 z-50 hidden overflow-y-auto p-4">
+    <div class="max-w-sm mx-auto mt-8 bg-white rounded-2xl">
+     <div class="p-4 border-b border-gray-200 flex items-center justify-between">
+      <h3 id="customize-title" class="text-lg font-bold text-gray-800">Customize Item</h3><button onclick="closeCustomizeModal()" class="text-gray-500 hover:text-gray-700">
+       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+       </svg></button>
+     </div>
+     <div id="customize-content" class="p-4 space-y-4 max-h-[60vh] overflow-y-auto"><!-- Customize options rendered here -->
+     </div>
+     <div class="p-4 border-t border-gray-200 bg-gray-50 flex gap-2">
+      <button onclick="closeCustomizeModal()" class="flex-1 px-4 py-3 border-2 border-gray-300 rounded-xl font-bold text-gray-700 hover:bg-gray-100 transition-colors">Batal</button><button onclick="addToCartFromModal()" class="flex-1 px-4 py-3 bg-pink-600 text-white rounded-xl font-bold hover:bg-pink-700 transition-colors">✅ Tambah ke Keranjang</button>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+    const defaultConfig = {
+      restaurant_name: 'WAROENG NYAMBUNG TRESNO',
+      welcome_text: 'One Bite, Fall in Tresno! 💛'
+    };
 
-    <script>
-        // ============================================
-        "https://script.google.com/macros/s/AKfycbyPHF71dxX-D2fRjGh4rpQ-lahgvAujfeRI91FCgT7G02W6uy2fX09CESdjiPznlSFc/exec";
-        // ============================================
+    // MENU DATA - SESUAI REQUEST 46 ITEM
+    const menuItems = [
+      // MAKANAN
+      { id: 1, name: 'Basreng Basah', price: 5000, category: 'makanan', emoji: '🌶️', desc: 'baso ikan yg alergi bodoamat dah', bumbu: ['Chili Oil', 'Daun Jeruk', 'Sapi Panggang', 'Balado', 'BBQ', 'Pedas Tabur', 'Jagung Manis'] },
+      { id: 2, name: 'Aneka Frozen Food', price: 1000, category: 'makanan', emoji: '🍥', desc: 'capek nambahin, beli ajalah rasain sendiri', items: ['Sosis', 'Kornet', 'Otak-otak', 'Sukoi', 'Tempura', 'Tofu', 'Nugget', 'Scallop', 'Siomay', 'Cireng Salju', 'pentol'], bumbu: ['Chili Oil', 'Daun Jeruk', 'Sapi Panggang', 'Balado', 'BBQ', 'Pedas Tabur', 'Jagung Manis'] },
+      { id: 3, name: 'Kentang', price: 5000, category: 'makanan', emoji: '🍟', desc: 'easy peasy', bumbu: ['Chili Oil', 'Daun Jeruk', 'Sapi Panggang', 'Balado', 'BBQ', 'Pedas Tabur', 'Jagung Manis'] },
+      { id: 4, name: 'Tahu Kocek', price: 5000, category: 'makanan', emoji: '🌶️', desc: 'kebetulan asli jember' },
+      { id: 17, name: 'Nasi Bakar Tongkol', price: 10000, category: 'makanan', emoji: '🍚', desc: 'Nasi bakar + Tongkol', nasiVarian: ['Daun Jeruk', 'Goreng Garam'] },
+      { id: 18, name: 'Nasi Bakar Ayam', price: 10000, category: 'makanan', emoji: '🍚', desc: 'Nasi bakar + Ayam', nasiVarian: ['Daun Jeruk', 'Goreng Garam'] },
+      { id: 19, name: 'Nasi Bakar Jamur', price: 10000, category: 'makanan', emoji: '🍚', desc: 'Nasi bakar + Jamur', nasiVarian: ['Daun Jeruk', 'Goreng Garam'] },
+      { id: 20, name: 'Nasi Bakar Teri', price: 10000, category: 'makanan', emoji: '🍚', desc: 'Nasi bakar + Teri', nasiVarian: ['Daun Jeruk', 'Goreng Garam'] },
+      { id: 21, name: 'Ayam Classic Korea', price: 18000, category: 'makanan', emoji: '🍗', desc: 'gaada nasinya😑', sauce: ['Blackpepper', 'Spicy', 'Garlic Butter'] },
+      { id: 22, name: 'Nasi Ayam Korea', price: 20000, category: 'makanan', emoji: '🍛', desc: 'ada nasinya🥱', sauce: ['Blackpepper', 'Spicy', 'Garlic Butter'] },
 
-        function pilihMenu(namaMenu, harga) {
-            document.getElementById('pesanan').value = namaMenu;
-            document.getElementById('total').value = harga;
-            
-            // Tampilkan nota
-            document.getElementById('nota').style.display = 'block';
-            document.getElementById('nota-content').innerHTML = '<div class="nota-item"><span>' + namaMenu + '</span><span>Rp ' + harga.toLocaleString() + '</span></div>';
-            document.getElementById('nota-total').innerText = harga.toLocaleString();
-        }
+      // ROPANG
+      { id: 5, name: 'Ropang Manis Mini', price: 2000, category: 'ropang', emoji: '🥪', desc: 'pokonya mini', rasa: ['Coklat', 'Matcha', 'Tiramisu', 'Blueberry', 'Strawberry'], maxRasa: 1, topping: ['Meses', 'Keju', 'Oreo', 'Red Velvet'], toppingPrice: 1000, maxTopping: 1 },
+      { id: 6, name: 'Ropang Manis Reguler', price: 5000, category: 'ropang', emoji: '🥪', desc: 'max 2 rasa+topping', rasa: ['Coklat', 'Matcha', 'Tiramisu', 'Blueberry', 'Strawberry'], maxRasa: 2, topping: ['Meses', 'Keju', 'Oreo', 'Red Velvet'], maxTopping: 1 },
+      { id: 7, name: 'Ropang Asin Reguler', price: 5000, category: 'ropang', emoji: '🥪', desc: 'bule bilang ini sandwich', options: ['Saus Sambal', 'Saus Tomat'] },
 
-        document.getElementById('orderForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            var nama = document.getElementById('nama').value;
-            var alamat = document.getElementById('alamat').value;
-            var pesanan = document.getElementById('pesanan').value;
-            var total = document.getElementById('total').value;
-            
-            document.getElementById('status').innerHTML = '⏳ Mengirim pesanan...';
-            document.getElementById('status').className = '';
-            
-            var formData = new FormData();
-            formData.append('nama', nama);
-            formData.append('alamat', alamat);
-            formData.append('pesanan', pesanan);
-            formData.append('total', total);
-            
-            fetch(WEB_APP_URL, {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('status').innerHTML = '✅ ' + data.message + '<br>Silakan hubungi admin untuk konfirmasi pembayaran.';
-                document.getElementById('status').className = 'success';
-                document.getElementById('orderForm').reset();
-            })
-            .catch(error => {
-                document.getElementById('status').innerHTML = '❌ Gagal mengirim pesanan. Coba lagi.';
-                document.getElementById('status').className = 'error';
-                console.error('Error:', error);
-            });
+      // MIE
+      { id: 8, name: 'Sedaap Goreng', price: 6000, category: 'mie', emoji: '🍜', desc: 'Mie Sedaap goreng' },
+      { id: 9, name: 'Sedaap Kari Spesial', price: 6000, category: 'mie', emoji: '🍜', desc: 'Mie Sedaap kari spesial' },
+      { id: 10, name: 'Indomie Kari Ayam', price: 6000, category: 'mie', emoji: '🍜', desc: 'Indomie kari ayam' },
+      { id: 11, name: 'Indomie Goreng', price: 6000, category: 'mie', emoji: '🍜', desc: 'Indomie goreng' },
+      { id: 12, name: 'Indomie Soto Koya', price: 6000, category: 'mie', emoji: '🍜', desc: 'Indomie soto koya' },
+      { id: 13, name: 'Indomie Soto Koya Pedas', price: 6000, category: 'mie', emoji: '🍜', desc: 'Indomie soto koya pedas' },
+      { id: 14, name: 'Indomie Ayam Bawang', price: 6000, category: 'mie', emoji: '🍜', desc: 'Indomie ayam bawang' },
+      { id: 15, name: 'Indomie Rendang', price: 6000, category: 'mie', emoji: '🍜', desc: 'Indomie rendang' },
+      { id: 16, name: 'Intermie', price: 4000, category: 'mie', emoji: '🍜', desc: 'Mie Intermie' },
+
+      // JAJANAN
+      { id: 23, name: 'Cheese Roll', price: 5000, category: 'jajanan', emoji: '🧀', desc: 'Cheese roll Ghanghib (max 2 rasa)', rasa: ['Coklat', 'Strawberry', 'Cappuccino', 'Matcha', 'Taro', 'Tiramisu'], maxRasa: 2 },
+      { id: 24, name: 'Piscok', price: 5000, category: 'jajanan', emoji: '🍌', desc: 'Piscok Ghanghib (max 2 rasa)', rasa: ['Coklat', 'Strawberry', 'Cappuccino', 'Matcha', 'Taro', 'Tiramisu'], maxRasa: 2 },
+      { id: 25, name: 'Ubi Roll', price: 5000, category: 'jajanan', emoji: '🍠', desc: 'Ubi roll Ghanghib (max 2 rasa)', rasa: ['Coklat', 'Strawberry', 'Cappuccino', 'Matcha', 'Taro', 'Tiramisu'], maxRasa: 2 },
+
+      // ES
+      { id: 26, name: 'Es Krim S', price: 3000, category: 'es', emoji: '🍨', desc: 'Es krim size S (original)' },
+      { id: 27, name: 'Es Cemil M', price: 5000, category: 'es', emoji: '🍨', desc: 'Es cemil size M' },
+      { id: 28, name: 'Es Cemil L', price: 10000, category: 'es', emoji: '🍨', desc: 'Es cemil size L' },
+      { id: 29, name: 'Es Cemil Brownies', price: 15000, category: 'es', emoji: '🍫', desc: 'Es cemil brownies premium' },
+      { id: 30, name: "Tresno 'Cone S", price: 5000, category: 'es', emoji: '🍦', desc: "Tresno cone size S" },
+      { id: 31, name: "Tresno 'Cone M", price: 8000, category: 'es', emoji: '🍦', desc: "Tresno cone size M" },
+      { id: 32, name: 'Espressia Durian', price: 7000, category: 'es', emoji: '🍻', desc: 'Es durian Espressia' },
+
+      // MINUMAN
+      { id: 33, name: 'Teajus', price: 2000, category: 'minuman', emoji: '🥤', desc: 'Teh jus segar', options: ['Gula Batu', 'Melati'] },
+      { id: 34, name: 'Kopi Keplak', price: 3000, category: 'minuman', emoji: '☕', desc: 'Kopi keplak' },
+      { id: 35, name: 'Teh', price: 3000, category: 'minuman', emoji: '🍵', desc: 'Teh hangat', suhuOptions: ['Es', 'Panas'] },
+      { id: 36, name: 'Pop Ice', price: 3000, category: 'minuman', emoji: '🧊', desc: 'Pop ice', options: ['Mangga', 'Bubblegum', 'Vanilla', 'Coklat'] },
+      { id: 37, name: 'Nutrisari', price: 3000, category: 'minuman', emoji: '🥛', desc: 'Nutrisari', options: ['Semangka', 'Cocopandan', 'Kelapa Muda'] },
+      { id: 38, name: 'Susu Jahe', price: 3000, category: 'minuman', emoji: '🥛', desc: 'Susu jahe', suhuOptions: ['Es', 'Panas'] },
+      { id: 39, name: 'Frisian Flag', price: 3000, category: 'minuman', emoji: '🥛', desc: 'Susu Frisian Flag', options: ['Coklat', 'Putih'], suhuOptions: ['Es', 'Panas'] },
+      { id: 40, name: 'Torabika Creamy Latte', price: 4000, category: 'minuman', emoji: '☕', desc: 'Torabika creamy latte', suhuOptions: ['Es', 'Panas'] },
+      { id: 41, name: 'Chocolatos', price: 4000, category: 'minuman', emoji: '🍫', desc: 'Chocolatos', options: ['Matcha', 'Coklat', 'Creamy Chocolatery'], suhuOptions: ['Es', 'Panas'] },
+      { id: 42, name: 'Milo', price: 4000, category: 'minuman', emoji: '🥤', desc: 'Milo', suhuOptions: ['Es', 'Panas'] },
+      { id: 43, name: 'Indocafe', price: 4000, category: 'minuman', emoji: '☕', desc: 'Indocafe instant coffee', suhuOptions: ['Es', 'Panas'] },
+      { id: 44, name: 'Teh Tarik', price: 5000, category: 'minuman', emoji: '🍺', desc: 'Teh tarik premium', suhuOptions: ['Es', 'Panas'] },
+      { id: 45, name: 'Good Day Freeze Mocha', price: 5000, category: 'minuman', emoji: '☕', desc: 'Good day freeze mocha', suhuOptions: ['Es', 'Panas'] },
+      { id: 46, name: 'Dancow', price: 6000, category: 'minuman', emoji: '🥛', desc: 'Dancow premium milk', suhuOptions: ['Es', 'Panas'] }
+    ];
+
+    let cart = [];
+    let currentCategory = 'all';
+    let allOrders = [];
+    let isSubmitting = false;
+    let adminFilterStatus = 'all';
+    let currentCustomizing = null;
+    let customizationChoices = {};
+    let adminRefreshInterval = null;
+
+    function formatCurrency(amount) {
+      return 'Rp ' + amount.toLocaleString('id-ID');
+    }
+
+    function generateOrderId() {
+      return 'ORD-' + Date.now().toString(36).toUpperCase();
+    }
+
+    function renderMenu() {
+      const grid = document.getElementById('menu-grid');
+      const filtered = currentCategory === 'all'
+        ? menuItems
+        : menuItems.filter(item => item.category === currentCategory);
+
+      grid.innerHTML = filtered.map(item => {
+        const cartItem = cart.find(c => c.id === item.id);
+        const quantity = cartItem ? cartItem.quantity : 0;
+
+        return `
+          <div class="bg-white rounded-xl shadow-md overflow-hidden fade-in hover:shadow-lg transition-shadow">
+            <div class="bg-gradient-to-br from-pink-100 to-rose-100 p-4 text-center">
+              <span class="text-4xl">${item.emoji}</span>
+            </div>
+            <div class="p-3">
+              <h3 class="font-bold text-gray-800 text-sm mb-1 line-clamp-1">${item.name}</h3>
+              <p class="text-xs text-gray-500 mb-2 line-clamp-2">${item.desc}</p>
+              <div class="flex items-center justify-between">
+                <span class="text-pink-600 font-bold text-sm">${formatCurrency(item.price)}</span>
+                ${quantity === 0 ? `
+                  <button onclick="openCustomizeModal(${item.id})" class="bg-pink-600 hover:bg-pink-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors">
+                    + Tambah
+                  </button>
+                ` : `
+                  <div class="flex items-center gap-2">
+                    <button onclick="updateQuantity(${item.id}, -1)" class="bg-gray-200 hover:bg-gray-300 text-gray-700 w-7 h-7 rounded-full flex items-center justify-center font-bold transition-colors">-</button>
+                    <span class="font-bold text-gray-800 w-5 text-center">${quantity}</span>
+                    <button onclick="updateQuantity(${item.id}, 1)" class="bg-pink-600 hover:bg-pink-700 text-white w-7 h-7 rounded-full flex items-center justify-center font-bold transition-colors">+</button>
+                  </div>
+                `}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function filterCategory(category) {
+      currentCategory = category;
+
+      document.querySelectorAll('.category-btn').forEach(btn => {
+        btn.classList.remove('bg-pink-600', 'text-white');
+        btn.classList.add('bg-pink-100', 'text-pink-700');
+      });
+
+      event.target.classList.remove('bg-pink-100', 'text-pink-700');
+      event.target.classList.add('bg-pink-600', 'text-white');
+
+      renderMenu();
+    }
+
+    function addToCart(itemId) {
+      const item = menuItems.find(m => m.id === itemId);
+      if (!item) return;
+
+      const existing = cart.find(c => c.id === itemId);
+      if (existing) {
+        existing.quantity++;
+      } else {
+        cart.push({ ...item, quantity: 1, customization: {} });
+      }
+
+      updateCartUI();
+      renderMenu();
+
+      const countEl = document.getElementById('cart-count');
+      countEl.classList.add('cart-bounce');
+      setTimeout(() => countEl.classList.remove('cart-bounce'), 300);
+    }
+
+    function openCustomizeModal(itemId) {
+      const item = menuItems.find(m => m.id === itemId);
+      if (!item) return;
+
+      currentCustomizing = item;
+      customizationChoices = {};
+
+      document.getElementById('customize-title').textContent = `${item.emoji} ${item.name}`;
+      const content = document.getElementById('customize-content');
+      
+      let html = '';
+
+      // Bumbu options
+      if (item.bumbu && item.bumbu.length > 0) {
+        html += `
+          <div>
+            <label class="font-bold text-gray-800 block mb-2">🌶️ Pilih Bumbu (bisa lebih dari 1):</label>
+            <div class="space-y-2">
+              ${item.bumbu.map(bumbu => `
+                <label class="flex items-center gap-3 p-2 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-pink-50 transition-colors">
+                  <input type="checkbox" name="bumbu" value="${bumbu}" onchange="updateMultiSelection('bumbu')" class="w-4 h-4">
+                  <span>${bumbu}</span>
+                </label>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      // Items (Frozen Food)
+      if (item.items && item.items.length > 0) {
+        html += `
+          <div>
+            <label class="font-bold text-gray-800 block mb-2">❄️ Pilih Item (bisa lebih dari 1):</label>
+            <div class="space-y-2">
+              ${item.items.map(itemOption => `
+                <label class="flex items-center gap-3 p-2 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-pink-50 transition-colors">
+                  <input type="checkbox" name="items" value="${itemOption}" onchange="updateMultiSelection('items')" class="w-4 h-4">
+                  <span>${itemOption}</span>
+                </label>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      // Rasa options (dengan batasan maxRasa jika ada)
+      if (item.rasa && item.rasa.length > 0) {
+        const maxRasa = item.maxRasa || 999;
+        const rasaText = maxRasa === 1 ? `✨ Pilih Rasa (1 pilihan):` : `✨ Pilih Rasa (max ${maxRasa}):`;
+        html += `
+          <div>
+            <label class="font-bold text-gray-800 block mb-2">${rasaText}</label>
+            <div class="space-y-2">
+              ${item.rasa.map(rasa => `
+                <label class="flex items-center gap-3 p-2 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-pink-50 transition-colors">
+                  <input type="checkbox" name="rasa" value="${rasa}" onchange="updateRasaSelection('${item.id}')" class="w-4 h-4">
+                  <span>${rasa}</span>
+                </label>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      // Topping options (dengan batasan maxTopping jika ada)
+      if (item.topping && item.topping.length > 0) {
+        const maxTopping = item.maxTopping || 999;
+        const toppingText = maxTopping === 1 ? `🎀 Pilih Topping (1 pilihan):` : `🎀 Pilih Topping (bisa lebih dari 1):`;
+        html += `
+          <div>
+            <label class="font-bold text-gray-800 block mb-2">${toppingText}</label>
+            <div class="space-y-2">
+              ${item.topping.map(top => {
+                const toppingPrice = item.toppingPrice ? `<span class="text-xs text-gray-500">(+${formatCurrency(item.toppingPrice)})</span>` : '';
+                return `
+                  <label class="flex items-center gap-3 p-2 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-pink-50 transition-colors">
+                    <input type="checkbox" name="topping" value="${top}" onchange="updateToppingSelection('${item.id}')" class="w-4 h-4">
+                    <span>${top} ${toppingPrice}</span>
+                  </label>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      // Sauce options
+      if (item.sauce && item.sauce.length > 0) {
+        html += `
+          <div>
+            <label class="font-bold text-gray-800 block mb-2">🍯 Pilih Sauce (bisa lebih dari 1):</label>
+            <div class="space-y-2">
+              ${item.sauce.map(sauce => `
+                <label class="flex items-center gap-3 p-2 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-pink-50 transition-colors">
+                  <input type="checkbox" name="sauce" value="${sauce}" onchange="updateMultiSelection('sauce')" class="w-4 h-4">
+                  <span>${sauce}</span>
+                </label>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      // Nasi Varian
+      if (item.nasiVarian && item.nasiVarian.length > 0) {
+        html += `
+          <div>
+            <label class="font-bold text-gray-800 block mb-2">🍚 Pilih Nasi (bisa lebih dari 1):</label>
+            <div class="space-y-2">
+              ${item.nasiVarian.map(nasi => `
+                <label class="flex items-center gap-3 p-2 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-pink-50 transition-colors">
+                  <input type="checkbox" name="nasi" value="${nasi}" onchange="updateMultiSelection('nasi')" class="w-4 h-4">
+                  <span>${nasi}</span>
+                </label>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      // Suhu Options (Es/Panas)
+      if (item.suhuOptions && item.suhuOptions.length > 0) {
+        html += `
+          <div>
+            <label class="font-bold text-gray-800 block mb-2">🌡️ Pilih Suhu:</label>
+            <div class="space-y-2">
+              ${item.suhuOptions.map(suhu => `
+                <label class="flex items-center gap-3 p-2 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-pink-50 transition-colors">
+                  <input type="radio" name="suhu" value="${suhu}" onchange="customizationChoices.suhu = '${suhu}';" class="w-4 h-4">
+                  <span>${suhu}</span>
+                </label>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      // Generic options (untuk pilihan single)
+      if (item.options && item.options.length > 0) {
+        html += `
+          <div>
+            <label class="font-bold text-gray-800 block mb-2">⚙️ Pilih Opsi (bisa lebih dari 1):</label>
+            <div class="space-y-2">
+              ${item.options.map(option => `
+                <label class="flex items-center gap-3 p-2 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-pink-50 transition-colors">
+                  <input type="checkbox" name="options" value="${option}" onchange="updateMultiSelection('options')" class="w-4 h-4">
+                  <span>${option}</span>
+                </label>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      // Quantity
+      html += `
+        <div>
+          <label class="font-bold text-gray-800 block mb-2">📦 Jumlah:</label>
+          <div class="flex items-center gap-3 justify-center p-3 border-2 border-pink-200 rounded-lg">
+            <button onclick="decreaseQuantityModal()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 w-10 h-10 rounded-full flex items-center justify-center font-bold transition-colors">-</button>
+            <span id="qty-display" class="font-bold text-xl text-gray-800 w-8 text-center">1</span>
+            <button onclick="increaseQuantityModal()" class="bg-pink-600 hover:bg-pink-700 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold transition-colors">+</button>
+          </div>
+        </div>
+      `;
+
+      content.innerHTML = html;
+      customizationChoices.quantity = 1;
+
+      document.getElementById('customize-modal').classList.remove('hidden');
+    }
+
+    function updateMultiSelection(fieldName) {
+      const checked = Array.from(document.querySelectorAll(`input[name="${fieldName}"]:checked`)).map(el => el.value);
+      customizationChoices[fieldName] = checked.join(', ');
+    }
+
+    function updateRasaSelection(itemId) {
+      const item = menuItems.find(m => m.id === itemId);
+      const maxRasa = item?.maxRasa || 999;
+      const checked = Array.from(document.querySelectorAll(`input[name="rasa"]:checked`));
+      
+      if (checked.length > maxRasa) {
+        checked[checked.length - 1].checked = false;
+        showToast(`Max ${maxRasa} rasa dapat dipilih!`, 'error');
+        return;
+      }
+      
+      customizationChoices.rasa = checked.map(el => el.value).join(', ');
+    }
+
+    function updateToppingSelection(itemId) {
+      const item = menuItems.find(m => m.id === itemId);
+      const maxTopping = item?.maxTopping || 999;
+      const checked = Array.from(document.querySelectorAll(`input[name="topping"]:checked`));
+      
+      if (checked.length > maxTopping) {
+        checked[checked.length - 1].checked = false;
+        showToast(`Max ${maxTopping} topping dapat dipilih!`, 'error');
+        return;
+      }
+      
+      customizationChoices.topping = checked.map(el => el.value).join(', ');
+    }
+
+    function decreaseQuantityModal() {
+      if (customizationChoices.quantity > 1) {
+        customizationChoices.quantity--;
+        document.getElementById('qty-display').textContent = customizationChoices.quantity;
+      }
+    }
+
+    function increaseQuantityModal() {
+      customizationChoices.quantity++;
+      document.getElementById('qty-display').textContent = customizationChoices.quantity;
+    }
+
+    function closeCustomizeModal() {
+      document.getElementById('customize-modal').classList.add('hidden');
+      currentCustomizing = null;
+      customizationChoices = {};
+    }
+
+    function addToCartFromModal() {
+      if (!currentCustomizing) return;
+
+      const existing = cart.find(c => c.id === currentCustomizing.id);
+      
+      // Hitung harga tambahan dari topping (jika ada)
+      let extraPrice = 0;
+      if (currentCustomizing.toppingPrice && customizationChoices.topping) {
+        const selectedToppings = customizationChoices.topping.split(', ').filter(t => t);
+        extraPrice = selectedToppings.length * currentCustomizing.toppingPrice;
+      }
+
+      const finalPrice = currentCustomizing.price + extraPrice;
+      
+      if (existing) {
+        existing.quantity += customizationChoices.quantity || 1;
+      } else {
+        cart.push({
+          ...currentCustomizing,
+          price: finalPrice,
+          quantity: customizationChoices.quantity || 1,
+          customization: { ...customizationChoices }
         });
-    </script>
-</body>
+      }
+
+      updateCartUI();
+      renderMenu();
+      closeCustomizeModal();
+
+      const countEl = document.getElementById('cart-count');
+      countEl.classList.add('cart-bounce');
+      setTimeout(() => countEl.classList.remove('cart-bounce'), 300);
+    }
+
+    function updateQuantity(itemId, delta) {
+      const item = cart.find(c => c.id === itemId);
+      if (!item) return;
+
+      item.quantity += delta;
+      if (item.quantity <= 0) {
+        cart = cart.filter(c => c.id !== itemId);
+      }
+
+      updateCartUI();
+      renderMenu();
+      renderCartItems();
+    }
+
+    function updateCartUI() {
+      const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+      const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+      const cartCount = document.getElementById('cart-count');
+      const floatingCart = document.getElementById('floating-cart');
+      const floatingCount = document.getElementById('floating-cart-count');
+      const cartTotal = document.getElementById('cart-total');
+
+      if (totalItems > 0) {
+        cartCount.textContent = totalItems;
+        cartCount.classList.remove('hidden');
+        floatingCart.classList.remove('hidden');
+        floatingCount.textContent = totalItems;
+      } else {
+        cartCount.classList.add('hidden');
+        floatingCart.classList.add('hidden');
+      }
+
+      cartTotal.textContent = formatCurrency(totalPrice);
+    }
+
+    function renderCartItems() {
+      const container = document.getElementById('cart-items');
+
+      if (cart.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-8">
+            <span class="text-5xl mb-3 block">🛒</span>
+            <p class="text-gray-500">Keranjang masih kosong</p>
+            <p class="text-gray-400 text-sm">Tambahkan menu favorit Anda!</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = cart.map(item => {
+        const customizationText = item.customization && Object.keys(item.customization).length > 0
+          ? `<p class="text-xs text-gray-500 mt-1">Pilihan: ${Object.values(item.customization).filter(v => v && v !== 0).join(' • ')}</p>`
+          : '';
+
+        return `
+          <div class="flex items-start gap-3 bg-gray-50 rounded-xl p-3 mb-2">
+            <span class="text-2xl">${item.emoji}</span>
+            <div class="flex-1">
+              <h4 class="font-medium text-gray-800 text-sm">${item.name}</h4>
+              ${customizationText}
+              <p class="text-pink-600 font-bold text-sm mt-1">${formatCurrency(item.price)}</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="updateQuantity(${item.id}, -1)" class="bg-gray-200 hover:bg-gray-300 text-gray-700 w-8 h-8 rounded-full flex items-center justify-center font-bold transition-colors">-</button>
+              <span class="font-bold text-gray-800 w-6 text-center">${item.quantity}</span>
+              <button onclick="updateQuantity(${item.id}, 1)" class="bg-pink-600 hover:bg-pink-700 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold transition-colors">+</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function toggleCart() {
+      const panel = document.getElementById('cart-panel');
+      const overlay = document.getElementById('cart-overlay');
+
+      if (panel.classList.contains('translate-y-full')) {
+        panel.classList.remove('translate-y-full');
+        overlay.classList.remove('hidden');
+        renderCartItems();
+      } else {
+        panel.classList.add('translate-y-full');
+        overlay.classList.add('hidden');
+      }
+    }
+
+    async function submitOrder() {
+      if (cart.length === 0) {
+        showToast('Keranjang masih kosong!', 'error');
+        return;
+      }
+
+      const tableNumber = document.getElementById('table-number').value.trim();
+      if (!tableNumber) {
+        showToast('Mohon isi nomor meja!', 'error');
+        document.getElementById('table-number').focus();
+        return;
+      }
+
+      if (allOrders.length >= 999) {
+        showToast('Maaf, sistem sedang penuh. Silakan coba lagi nanti.', 'error');
+        return;
+      }
+
+      if (isSubmitting) return;
+      isSubmitting = true;
+
+      const submitBtn = document.getElementById('submit-btn');
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<svg class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><span>Memproses...</span>';
+
+      const customerName = document.getElementById('customer-name').value.trim();
+      const paymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
+      const notes = document.getElementById('order-notes').value.trim();
+      const orderId = generateOrderId();
+      const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+      const itemsString = cart.map(item => {
+        let itemStr = `${item.name} x${item.quantity}`;
+        if (item.customization && Object.keys(item.customization).length > 0) {
+          const customStr = Object.values(item.customization).filter(v => v && v !== 0).join(' | ');
+          if (customStr) itemStr += ` (${customStr})`;
+        }
+        return itemStr;
+      }).join(', ');
+
+      const orderData = {
+        order_id: orderId,
+        table_number: tableNumber,
+        customer_name: customerName || 'Pelanggan',
+        items: itemsString,
+        total_price: totalPrice,
+        status: 'pending',
+        created_at: new Date().toISOString(),
+        notes: notes || '-',
+        payment_method: paymentMethod
+      };
+
+      try {
+        const result = await window.dataSdk.create(orderData);
+
+        if (result.isOk) {
+          document.getElementById('order-number').textContent = `Nomor Pesanan: ${orderId} | Pembayaran: ${paymentMethod}`;
+          document.getElementById('success-modal').classList.remove('hidden');
+          document.getElementById('success-modal').classList.add('flex');
+
+          cart = [];
+          updateCartUI();
+          renderMenu();
+          toggleCart();
+
+          document.getElementById('customer-name').value = '';
+          document.getElementById('order-notes').value = '';
+          document.querySelector('input[name="payment-method"]').checked = true;
+        } else {
+          showToast('Gagal mengirim pesanan. Coba lagi.', 'error');
+        }
+      } catch (error) {
+        showToast('Terjadi kesalahan. Coba lagi.', 'error');
+      }
+
+      isSubmitting = false;
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<span>Pesan Sekarang</span><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>';
+    }
+
+    function closeSuccessModal() {
+      document.getElementById('success-modal').classList.add('hidden');
+      document.getElementById('success-modal').classList.remove('flex');
+    }
+
+    function toggleAdminPanel() {
+      const panel = document.getElementById('admin-panel');
+      if (!panel) {
+        createAdminPanel();
+        return;
+      }
+
+      if (panel.classList.contains('hidden')) {
+        panel.classList.remove('hidden');
+        adminFilterStatus = 'all';
+        startAutoRefresh();
+        renderAdminOrders();
+      } else {
+        panel.classList.add('hidden');
+        stopAutoRefresh();
+      }
+    }
+
+    function startAutoRefresh() {
+      if (adminRefreshInterval) return;
+      
+      adminRefreshInterval = setInterval(() => {
+        renderAdminOrders();
+        updateAdminStats();
+      }, 5000);
+    }
+
+    function stopAutoRefresh() {
+      if (adminRefreshInterval) {
+        clearInterval(adminRefreshInterval);
+        adminRefreshInterval = null;
+      }
+    }
+
+    function updateAdminStats() {
+      const total = allOrders.length;
+      const pending = allOrders.filter(o => o.status === 'pending').length;
+      const completed = allOrders.filter(o => o.status === 'completed').length;
+
+      const totalEl = document.getElementById('total-orders');
+      const pendingEl = document.getElementById('pending-orders');
+      const completedEl = document.getElementById('completed-orders');
+
+      if (totalEl) totalEl.textContent = total;
+      if (pendingEl) pendingEl.textContent = pending;
+      if (completedEl) completedEl.textContent = completed;
+    }
+
+    function filterAdminOrders(status) {
+      adminFilterStatus = status;
+
+      document.querySelectorAll('.admin-filter-btn').forEach(btn => {
+        btn.classList.remove('bg-pink-600', 'text-white');
+        btn.classList.add('bg-gray-200', 'text-gray-700');
+      });
+
+      event.target.classList.remove('bg-gray-200', 'text-gray-700');
+      event.target.classList.add('bg-pink-600', 'text-white');
+
+      renderAdminOrders();
+    }
+
+    function renderAdminOrders() {
+      const container = document.getElementById('admin-orders-list');
+      if (!container) return;
+
+      const filtered = adminFilterStatus === 'all'
+        ? allOrders
+        : allOrders.filter(order => order.status === adminFilterStatus);
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<div class="text-center py-8"><p class="text-gray-500 text-lg">Tidak ada pesanan</p></div>';
+        return;
+      }
+
+      container.innerHTML = filtered.map(order => {
+        const isCompleted = order.status === 'completed';
+        return `
+          <div class="bg-gradient-to-r ${isCompleted ? 'from-green-50 to-emerald-50 border-green-200' : 'from-orange-50 to-amber-50 border-orange-200'} border-2 rounded-xl p-4">
+            <div class="flex items-start justify-between mb-3">
+              <div>
+                <h3 class="font-bold text-lg text-gray-800">${order.order_id}</h3>
+                <p class="text-sm text-gray-600">Meja: <span class="font-bold">${order.table_number}</span></p>
+              </div>
+              <span class="px-3 py-1 rounded-full text-xs font-bold ${isCompleted ? 'bg-green-200 text-green-800' : 'bg-orange-200 text-orange-800'}">
+                ${isCompleted ? '✅ Selesai' : '⏳ Pending'}
+              </span>
+            </div>
+
+            <div class="bg-white rounded-lg p-3 mb-3">
+              <p class="text-sm text-gray-600 mb-1"><strong>Nama:</strong> ${order.customer_name}</p>
+              <p class="text-sm text-gray-600 mb-1"><strong>Pesanan:</strong> ${order.items}</p>
+              <p class="text-sm text-gray-600 mb-1"><strong>Total:</strong> <span class="font-bold text-pink-600">${formatCurrency(order.total_price)}</span></p>
+              <p class="text-sm text-gray-600 mb-1"><strong>Pembayaran:</strong> <span class="font-bold ${order.payment_method === 'CASH' ? 'text-blue-600' : 'text-purple-600'}">${order.payment_method}</span></p>
+              ${order.notes && order.notes !== '-' ? `<p class="text-sm text-gray-600"><strong>Catatan:</strong> ${order.notes}</p>` : ''}
+            </div>
+
+            <div class="flex gap-2">
+              ${!isCompleted ? `
+                <button onclick="markOrderCompleted('${order.__backendId}')" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg font-medium text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                  ✅ Tandai Selesai
+                </button>
+              ` : ''}
+              <button onclick="deleteOrder('${order.__backendId}')" class="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg font-medium text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                🗑️ Hapus
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function markOrderCompleted(backendId) {
+      const order = allOrders.find(o => o.__backendId === backendId);
+      if (!order) return;
+
+      const btn = event.target;
+      btn.disabled = true;
+      btn.innerHTML = '<svg class="animate-spin w-4 h-4 inline" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
+
+      try {
+        const result = await window.dataSdk.update({ ...order, status: 'completed' });
+        if (result.isOk) {
+          showToast('✅ Pesanan ditandai selesai!', 'success');
+        } else {
+          showToast('❌ Gagal update pesanan', 'error');
+          btn.disabled = false;
+          btn.innerHTML = '✅ Tandai Selesai';
+        }
+      } catch (error) {
+        showToast('❌ Terjadi kesalahan', 'error');
+        btn.disabled = false;
+        btn.innerHTML = '✅ Tandai Selesai';
+      }
+    }
+
+    async function deleteOrder(backendId) {
+      const order = allOrders.find(o => o.__backendId === backendId);
+      if (!order) return;
+
+      const btn = event.target;
+      
+      // Two-step delete: first click shows confirmation
+      if (!btn.dataset.confirming) {
+        btn.dataset.confirming = 'true';
+        btn.innerHTML = '⚠️ Yakin? Klik lagi';
+        btn.classList.add('ring-2', 'ring-red-500');
+        
+        setTimeout(() => {
+          btn.removeAttribute('data-confirming');
+          btn.innerHTML = '🗑️ Hapus';
+          btn.classList.remove('ring-2', 'ring-red-500');
+        }, 3000);
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = '<svg class="animate-spin w-4 h-4 inline" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
+
+      try {
+        const result = await window.dataSdk.delete(order);
+        if (result.isOk) {
+          showToast('🗑️ Pesanan dihapus!', 'success');
+        } else {
+          showToast('❌ Gagal hapus pesanan', 'error');
+          btn.disabled = false;
+          btn.innerHTML = '🗑️ Hapus';
+        }
+      } catch (error) {
+        showToast('❌ Terjadi kesalahan', 'error');
+        btn.disabled = false;
+        btn.innerHTML = '🗑️ Hapus';
+      }
+    }
+
+    function showToast(message, type = 'info') {
+      const toast = document.createElement('div');
+      toast.className = `fixed top-20 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-xl shadow-lg z-50 fade-in ${
+        type === 'error' ? 'bg-red-500 text-white' : 'bg-green-500 text-white'
+      }`;
+      toast.textContent = message;
+      document.body.appendChild(toast);
+
+      setTimeout(() => toast.remove(), 3000);
+    }
+
+    const dataHandler = {
+      onDataChanged(data) {
+        allOrders = data;
+        renderAdminOrders();
+        updateAdminStats();
+      }
+    };
+
+    async function onConfigChange(config) {
+      const restaurantName = document.getElementById('restaurant-name');
+      if (restaurantName) {
+        restaurantName.textContent = config.restaurant_name || defaultConfig.restaurant_name;
+      }
+    }
+
+    async function init() {
+      if (window.elementSdk) {
+        window.elementSdk.init({
+          defaultConfig,
+          onConfigChange,
+          mapToCapabilities: () => ({
+            recolorables: [],
+            borderables: [],
+            fontEditable: undefined,
+            fontSizeable: undefined
+          }),
+          mapToEditPanelValues: (config) => new Map([
+            ['restaurant_name', config.restaurant_name || defaultConfig.restaurant_name],
+            ['welcome_text', config.welcome_text || defaultConfig.welcome_text]
+          ])
+        });
+      }
+
+      if (window.dataSdk) {
+        await window.dataSdk.init(dataHandler);
+      }
+
+      renderMenu();
+      updateCartUI();
+      updateAdminStats();
+    }
+
+    init();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9dc4486757cffd14',t:'MTc3MzUwMTg0MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
+}
