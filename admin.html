@@ -1,1 +1,219 @@
+<!doctype html>
+<html lang="id" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Menu Order - WAROENG NYAMBUNG TRESNO</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Poppins', sans-serif; }
+    .cart-bounce { animation: bounce 0.3s ease; }
+    @keyframes bounce {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+    .fade-in { animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .slide-up { animation: slideUp 0.4s ease; }
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js" type="text/javascript"></script>
+  <style>body { box-sizing: border-box; }</style>
+ </head>
+ <body class="h-full bg-amber-50 overflow-auto">
+  <div id="app" class="w-full h-full flex flex-col"><!-- Header -->
+   <header class="bg-gradient-to-r from-pink-600 to-rose-600 text-white p-4 sticky top-0 z-40 shadow-lg">
+    <div class="max-w-lg mx-auto flex items-center justify-between">
+     <div>
+      <h1 id="restaurant-name" class="text-xl font-bold">🍽️ WAROENG NYAMBUNG TRESNO</h1><span class="text-pink-100 text-sm">One Bite, Fall in Tresno! 💛</span>
+     </div><button onclick="toggleCart()" class="relative bg-white/20 hover:bg-white/30 p-3 rounded-full transition-all">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+      </svg><span id="cart-count" class="absolute -top-1 -right-1 bg-yellow-400 text-orange-900 text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center hidden">0</span> </button>
+    </div>
+   </header><!-- Table Number Input -->
+   <div class="bg-white border-b border-pink-200 p-3">
+    <div class="max-w-lg mx-auto flex items-center gap-3"><span class="text-pink-600 font-medium text-sm">📌 Nama Pelanggan:</span> <input type="text" id="table-number" placeholder="Contoh: 5" class="flex-1 px-3 py-2 border-2 border-pink-200 rounded-lg focus:border-pink-500 focus:outline-none text-center font-bold text-lg max-w-[100px]">
+    </div>
+   </div><!-- Category Tabs -->
+   <div class="bg-white border-b border-pink-100 sticky top-[88px] z-30">
+    <div class="max-w-lg mx-auto flex overflow-x-auto py-2 px-2 gap-2 scrollbar-hide"><button onclick="filterCategory('all')" class="category-btn active flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium bg-pink-600 text-white transition-all">Semua</button> <button onclick="filterCategory('makanan')" class="category-btn flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium bg-pink-100 text-pink-700 hover:bg-pink-200 transition-all">🍴 Makanan</button> <button onclick="filterCategory('ropang')" class="category-btn flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium bg-pink-100 text-pink-700 hover:bg-pink-200 transition-all">🥐 Ropang</button> <button onclick="filterCategory('mie')" class="category-btn flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium bg-pink-100 text-pink-700 hover:bg-pink-200 transition-all">🍜 Mie</button> <button onclick="filterCategory('jajanan')" class="category-btn flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium bg-pink-100 text-pink-700 hover:bg-pink-200 transition-all">🌮 Jajanan</button> <button onclick="filterCategory('es')" class="category-btn flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium bg-pink-100 text-pink-700 hover:bg-pink-200 transition-all">🍨 Es</button> <button onclick="filterCategory('minuman')" class="category-btn flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium bg-pink-100 text-pink-700 hover:bg-pink-200 transition-all">🥤 Minuman</button>
+    </div>
+   </div><!-- Menu Grid -->
+   <main class="flex-1 p-4 overflow-y-auto">
+    <div id="menu-grid" class="max-w-lg mx-auto grid grid-cols-2 gap-3 pb-20"><!-- Menu items rendered here -->
+    </div>
+   </main><!-- Cart Panel (Overlay) -->
+   <div id="cart-overlay" class="fixed inset-0 bg-black/50 z-50 hidden" onclick="toggleCart()"></div>
+   <div id="cart-panel" class="fixed bottom-0 left-0 right-0 bg-white rounded-t-3xl z-50 transform translate-y-full transition-transform duration-300 max-h-[80%] flex flex-col shadow-2xl">
+    <div class="p-4 border-b border-gray-200">
+     <div class="flex items-center justify-between">
+      <h2 class="text-lg font-bold text-gray-800">🛒 Keranjang Anda</h2><button onclick="toggleCart()" class="text-gray-500 hover:text-gray-700 p-2">
+       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+       </svg></button>
+     </div>
+    </div>
+    <div id="cart-items" class="flex-1 overflow-y-auto p-4"><!-- Cart items rendered here -->
+    </div>
+    <div class="p-4 border-t border-gray-200 bg-gray-50">
+     <div class="flex justify-between items-center mb-3"><span class="text-gray-600 font-medium">Total:</span> <span id="cart-total" class="text-2xl font-bold text-pink-600">Rp 0</span>
+     </div>
+     <div class="mb-3"><label class="text-sm font-medium text-gray-700 block mb-2">Atas Nama Siapa?</label> <input type="text" id="customer-name" placeholder="Masukkan nama Anda" class="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-pink-500 focus:outline-none">
+     </div>
+     <div class="mb-3"><label class="text-sm font-medium text-gray-700 block mb-2">Metode Pembayaran</label>
+      <div class="flex gap-2"><label class="flex-1 flex items-center gap-2 p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all"> <input type="radio" name="payment-method" value="CASH" checked class="w-4 h-4"> <span class="font-medium">💵 CASH</span> </label> <label class="flex-1 flex items-center gap-2 p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-all"> <input type="radio" name="payment-method" value="QRIS" class="w-4 h-4"> <span class="font-medium">📱 QRIS</span> </label>
+      </div>
+     </div>
+     <div class="mb-3"><label class="text-sm font-medium text-gray-700 block mb-2">Catatan/Request Khusus</label> <textarea id="order-notes" placeholder="Contoh: tanpa es, extra pedas, dll" class="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-pink-500 focus:outline-none resize-none" rows="2"></textarea>
+     </div><button onclick="submitOrder()" id="submit-btn" class="w-full bg-gradient-to-r from-pink-600 to-rose-600 text-white py-4 rounded-xl font-bold text-lg hover:from-pink-700 hover:to-rose-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"> <span>Pesan Sekarang</span>
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+      </svg></button>
+    </div>
+   </div><!-- Success Modal -->
+   <div id="success-modal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl p-6 max-w-sm w-full text-center slide-up">
+     <div class="text-6xl mb-4">
+      ✅
+     </div>
+     <h3 class="text-xl font-bold text-gray-800 mb-2">Pesanan Terkirim!</h3>
+     <p class="text-gray-600 mb-4">Pesanan Anda sedah diproses. Silakan tunggu di meja Anda.</p>
+     <p id="order-number" class="text-pink-600 font-bold mb-4"></p><button onclick="closeSuccessModal()" class="w-full bg-pink-600 text-white py-3 rounded-xl font-bold hover:bg-pink-700 transition-all">OK, Mengerti</button>
+    </div>
+   </div><!-- Floating Cart Button --> <button onclick="toggleCart()" id="floating-cart" class="fixed bottom-6 right-6 bg-gradient-to-r from-pink-600 to-rose-600 text-white p-4 rounded-full shadow-lg z-40 hidden hover:scale-110 transition-transform">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+    </svg><span id="floating-cart-count" class="absolute -top-1 -right-1 bg-yellow-400 text-orange-900 text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center">0</span> </button> <!-- Admin Toggle --> <button onclick="toggleAdminPanel()" id="admin-toggle" class="fixed top-4 right-4 bg-rose-600 hover:bg-rose-700 text-white px-3 py-2 rounded-lg text-xs font-medium transition-colors z-30">👨‍💼 Admin</button> <!-- Admin Panel -->
+   <div id="customize-modal" class="fixed inset-0 bg-black/50 z-50 hidden overflow-y-auto p-4">
+    <div class="max-w-sm mx-auto mt-8 bg-white rounded-2xl">
+     <div class="p-4 border-b border-gray-200 flex items-center justify-between">
+      <h3 id="customize-title" class="text-lg font-bold text-gray-800">Customize Item</h3><button onclick="closeCustomizeModal()" class="text-gray-500 hover:text-gray-700">
+       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+       </svg></button>
+     </div>
+     <div id="customize-content" class="p-4 space-y-4 max-h-[60vh] overflow-y-auto"><!-- Customize options rendered here -->
+     </div>
+     <div class="p-4 border-t border-gray-200 bg-gray-50 flex gap-2">
+      <button onclick="closeCustomizeModal()" class="flex-1 px-4 py-3 border-2 border-gray-300 rounded-xl font-bold text-gray-700 hover:bg-gray-100 transition-colors">Batal</button><button onclick="addToCartFromModal()" class="flex-1 px-4 py-3 bg-pink-600 text-white rounded-xl font-bold hover:bg-pink-700 transition-colors">✅ Tambah ke Keranjang</button>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+    const defaultConfig = {
+      restaurant_name: 'WAROENG NYAMBUNG TRESNO',
+      welcome_text: 'One Bite, Fall in Tresno! 💛'
+    };
 
+    // MENU DATA - SESUAI REQUEST 46 ITEM
+    const menuItems = [
+      // MAKANAN
+      { id: 1, name: 'Basreng Basah', price: 5000, category: 'makanan', emoji: '🌶️', desc: 'baso ikan yg alergi bodoamat dah', bumbu: ['Chili Oil', 'Daun Jeruk', 'Sapi Panggang', 'Balado', 'BBQ', 'Pedas Tabur', 'Jagung Manis'] },
+      { id: 2, name: 'Aneka Frozen Food', price: 1000, category: 'makanan', emoji: '🍥', desc: 'capek nambahin, beli ajalah rasain sendiri', items: ['Sosis', 'Kornet', 'Otak-otak', 'Sukoi', 'Tempura', 'Tofu', 'Nugget', 'Scallop', 'Siomay', 'Cireng Salju', 'pentol'], bumbu: ['Chili Oil', 'Daun Jeruk', 'Sapi Panggang', 'Balado', 'BBQ', 'Pedas Tabur', 'Jagung Manis'] },
+      { id: 3, name: 'Kentang', price: 5000, category: 'makanan', emoji: '🍟', desc: 'easy peasy', bumbu: ['Chili Oil', 'Daun Jeruk', 'Sapi Panggang', 'Balado', 'BBQ', 'Pedas Tabur', 'Jagung Manis'] },
+      { id: 4, name: 'Tahu Kocek', price: 5000, category: 'makanan', emoji: '🌶️', desc: 'kebetulan asli jember' },
+      { id: 17, name: 'Nasi Bakar Tongkol', price: 10000, category: 'makanan', emoji: '🍚', desc: 'Nasi bakar + Tongkol', nasiVarian: ['Daun Jeruk', 'Goreng Garam'] },
+      { id: 18, name: 'Nasi Bakar Ayam', price: 10000, category: 'makanan', emoji: '🍚', desc: 'Nasi bakar + Ayam', nasiVarian: ['Daun Jeruk', 'Goreng Garam'] },
+      { id: 19, name: 'Nasi Bakar Jamur', price: 10000, category: 'makanan', emoji: '🍚', desc: 'Nasi bakar + Jamur', nasiVarian: ['Daun Jeruk', 'Goreng Garam'] },
+      { id: 20, name: 'Nasi Bakar Teri', price: 10000, category: 'makanan', emoji: '🍚', desc: 'Nasi bakar + Teri', nasiVarian: ['Daun Jeruk', 'Goreng Garam'] },
+      { id: 21, name: 'Ayam Classic Korea', price: 18000, category: 'makanan', emoji: '🍗', desc: 'gaada nasinya😑', sauce: ['Blackpepper', 'Spicy', 'Garlic Butter'] },
+      { id: 22, name: 'Nasi Ayam Korea', price: 20000, category: 'makanan', emoji: '🍛', desc: 'ada nasinya🥱', sauce: ['Blackpepper', 'Spicy', 'Garlic Butter'] },
+
+      // ROPANG
+      { id: 5, name: 'Ropang Manis Mini', price: 2000, category: 'ropang', emoji: '🥪', desc: 'pokonya mini', rasa: ['Coklat', 'Matcha', 'Tiramisu', 'Blueberry', 'Strawberry'], maxRasa: 1, topping: ['Meses', 'Keju', 'Oreo', 'Red Velvet'], toppingPrice: 1000, maxTopping: 1 },
+      { id: 6, name: 'Ropang Manis Reguler', price: 5000, category: 'ropang', emoji: '🥪', desc: 'max 2 rasa+topping', rasa: ['Coklat', 'Matcha', 'Tiramisu', 'Blueberry', 'Strawberry'], maxRasa: 2, topping: ['Meses', 'Keju', 'Oreo', 'Red Velvet'], maxTopping: 1 },
+      { id: 7, name: 'Ropang Asin Reguler', price: 5000, category: 'ropang', emoji: '🥪', desc: 'bule bilang ini sandwich', options: ['Saus Sambal', 'Saus Tomat'] },
+
+      // MIE
+      { id: 8, name: 'Sedaap Goreng', price: 6000, category: 'mie', emoji: '🍜', desc: 'Mie Sedaap goreng' },
+      { id: 9, name: 'Sedaap Kari Spesial', price: 6000, category: 'mie', emoji: '🍜', desc: 'Mie Sedaap kari spesial' },
+      { id: 10, name: 'Indomie Kari Ayam', price: 6000, category: 'mie', emoji: '🍜', desc: 'Indomie kari ayam' },
+      { id: 11, name: 'Indomie Goreng', price: 6000, category: 'mie', emoji: '🍜', desc: 'Indomie goreng' },
+      { id: 12, name: 'Indomie Soto Koya', price: 6000, category: 'mie', emoji: '🍜', desc: 'Indomie soto koya' },
+      { id: 13, name: 'Indomie Soto Koya Pedas', price: 6000, category: 'mie', emoji: '🍜', desc: 'Indomie soto koya pedas' },
+      { id: 14, name: 'Indomie Ayam Bawang', price: 6000, category: 'mie', emoji: '🍜', desc: 'Indomie ayam bawang' },
+      { id: 15, name: 'Indomie Rendang', price: 6000, category: 'mie', emoji: '🍜', desc: 'Indomie rendang' },
+      { id: 16, name: 'Intermie', price: 4000, category: 'mie', emoji: '🍜', desc: 'Mie Intermie' },
+
+      // JAJANAN
+      { id: 23, name: 'Cheese Roll', price: 5000, category: 'jajanan', emoji: '🧀', desc: 'Cheese roll Ghanghib (max 2 rasa)', rasa: ['Coklat', 'Strawberry', 'Cappuccino', 'Matcha', 'Taro', 'Tiramisu'], maxRasa: 2 },
+      { id: 24, name: 'Piscok', price: 5000, category: 'jajanan', emoji: '🍌', desc: 'Piscok Ghanghib (max 2 rasa)', rasa: ['Coklat', 'Strawberry', 'Cappuccino', 'Matcha', 'Taro', 'Tiramisu'], maxRasa: 2 },
+      { id: 25, name: 'Ubi Roll', price: 5000, category: 'jajanan', emoji: '🍠', desc: 'Ubi roll Ghanghib (max 2 rasa)', rasa: ['Coklat', 'Strawberry', 'Cappuccino', 'Matcha', 'Taro', 'Tiramisu'], maxRasa: 2 },
+
+      // ES
+      { id: 26, name: 'Es Krim S', price: 3000, category: 'es', emoji: '🍨', desc: 'Es krim size S (original)' },
+      { id: 27, name: 'Es Cemil M', price: 5000, category: 'es', emoji: '🍨', desc: 'Es cemil size M' },
+      { id: 28, name: 'Es Cemil L', price: 10000, category: 'es', emoji: '🍨', desc: 'Es cemil size L' },
+      { id: 29, name: 'Es Cemil Brownies', price: 15000, category: 'es', emoji: '🍫', desc: 'Es cemil brownies premium' },
+      { id: 30, name: "Tresno 'Cone S", price: 5000, category: 'es', emoji: '🍦', desc: "Tresno cone size S" },
+      { id: 31, name: "Tresno 'Cone M", price: 8000, category: 'es', emoji: '🍦', desc: "Tresno cone size M" },
+      { id: 32, name: 'Espressia Durian', price: 7000, category: 'es', emoji: '🍻', desc: 'Es durian Espressia' },
+
+      // MINUMAN
+      { id: 33, name: 'Teajus', price: 2000, category: 'minuman', emoji: '🥤', desc: 'Teh jus segar', options: ['Gula Batu', 'Melati'] },
+      { id: 34, name: 'Kopi Keplak', price: 3000, category: 'minuman', emoji: '☕', desc: 'Kopi keplak' },
+      { id: 35, name: 'Teh', price: 3000, category: 'minuman', emoji: '🍵', desc: 'Teh hangat', suhuOptions: ['Es', 'Panas'] },
+      { id: 36, name: 'Pop Ice', price: 3000, category: 'minuman', emoji: '🧊', desc: 'Pop ice', options: ['Mangga', 'Bubblegum', 'Vanilla', 'Coklat'] },
+      { id: 37, name: 'Nutrisari', price: 3000, category: 'minuman', emoji: '🥛', desc: 'Nutrisari', options: ['Semangka', 'Cocopandan', 'Kelapa Muda'] },
+      { id: 38, name: 'Susu Jahe', price: 3000, category: 'minuman', emoji: '🥛', desc: 'Susu jahe', suhuOptions: ['Es', 'Panas'] },
+      { id: 39, name: 'Frisian Flag', price: 3000, category: 'minuman', emoji: '🥛', desc: 'Susu Frisian Flag', options: ['Coklat', 'Putih'], suhuOptions: ['Es', 'Panas'] },
+      { id: 40, name: 'Torabika Creamy Latte', price: 4000, category: 'minuman', emoji: '☕', desc: 'Torabika creamy latte', suhuOptions: ['Es', 'Panas'] },
+      { id: 41, name: 'Chocolatos', price: 4000, category: 'minuman', emoji: '🍫', desc: 'Chocolatos', options: ['Matcha', 'Coklat', 'Creamy Chocolatery'], suhuOptions: ['Es', 'Panas'] },
+      { id: 42, name: 'Milo', price: 4000, category: 'minuman', emoji: '🥤', desc: 'Milo', suhuOptions: ['Es', 'Panas'] },
+      { id: 43, name: 'Indocafe', price: 4000, category: 'minuman', emoji: '☕', desc: 'Indocafe instant coffee', suhuOptions: ['Es', 'Panas'] },
+      { id: 44, name: 'Teh Tarik', price: 5000, category: 'minuman', emoji: '🍺', desc: 'Teh tarik premium', suhuOptions: ['Es', 'Panas'] },
+      { id: 45, name: 'Good Day Freeze Mocha', price: 5000, category: 'minuman', emoji: '☕', desc: 'Good day freeze mocha', suhuOptions: ['Es', 'Panas'] },
+      { id: 46, name: 'Dancow', price: 6000, category: 'minuman', emoji: '🥛', desc: 'Dancow premium milk', suhuOptions: ['Es', 'Panas'] }
+    ];
+
+    let cart = [];
+    let currentCategory = 'all';
+    let allOrders = [];
+    let isSubmitting = false;
+    let adminFilterStatus = 'all';
+    let currentCustomizing = null;
+    let customizationChoices = {};
+    let adminRefreshInterval = null;
+
+    function formatCurrency(amount) {
+      return 'Rp ' + amount.toLocaleString('id-ID');
+    }
+
+    function generateOrderId() {
+      return 'ORD-' + Date.now().toString(36).toUpperCase();
+    }
+
+    function renderMenu() {
+      const grid = document.getElementById('menu-grid');
+      const filtered = currentCategory === 'all'
+        ? menuItems
+        : menuItems.filter(item => item.category === currentCategory);
+
+      grid.innerHTML = filtered.map(item => {
+        const cartItem = cart.find(c => c.id === item.id);
+        const quantity = cartItem ? cartItem.quantity : 0;
+
+        return `
+          <div class="bg-white rounded-xl shadow-md overflow-hidden fade-in hover:shadow-lg transition-shadow">
+            <div class="bg-gradient-to-br from-pink-100 to-rose-100 p-4 text-center">
+              <span class="text-4xl">${item.emoji}</span>
+            </div>
+            <div class="p-3">
+              <h3 class="font-bold text-gray-800 text-sm mb-1 line-clamp-1">${item.name}</h3>
+              <p class="text-xs text-gray-500 mb-2 line-clamp-2">${item.desc}</p>
+              <div class="flex items-center justify-between">
+                <span class="text-pink-600 font-bold text-sm">${formatCurrency(item.price)}</span>
+                ${quantity === 0 ? `
+                  <button onclick="openCustomizeModal(${item.id})" class="bg-pink-600 hover:bg-pink-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors">
+                    + Tambah
+                  </button>
+                ` : `
+                  <div class="flex items-center gap-2">
+                    <button onclick="updateQuantity(${item.id}, -1)" class="bg-gray-200 hover:bg-gray-300 text-gray-700 w-7 h-7 rounded-full flex items-center justify-center font-bold transition-colors">-</button>
+                    <span class="font-bold text-g
